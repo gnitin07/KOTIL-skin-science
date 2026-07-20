@@ -1,31 +1,31 @@
+// Build the favicon from the brand's official "K" mark.
+//
+// Source: raw-assets/kotil-favicon-source.png — the exact icon used on the live
+// site (kotilskinscience.com): a transparent PNG of the serif K. Using the real
+// asset keeps this site's tab icon identical to the main site.
+//
+// Run: npm run assets:favicon
 import sharp from 'sharp'
-// Square favicon: the K monogram on navy.
-const SRC = 'public/assets/kotil-logo-light.png'
-const NAVY = { r: 13, g: 27, b: 42, alpha: 1 }
+import { mkdir } from 'node:fs/promises'
 
-// Find the K's actual bounds by scanning the left slice for opaque pixels.
-const { data, info } = await sharp(SRC).raw().toBuffer({ resolveWithObject: true })
-const { width, height, channels } = info
-let minX = width, maxX = 0, minY = height, maxY = 0
-const SLICE = Math.round(width * 0.22) // left ~22% holds the K
-for (let y = 0; y < height; y++) {
-  for (let x = 0; x < SLICE; x++) {
-    if (data[(y * width + x) * channels + 3] > 40) {
-      if (x < minX) minX = x; if (x > maxX) maxX = x
-      if (y < minY) minY = y; if (y > maxY) maxY = y
-    }
-  }
-}
-const w = maxX - minX + 1, h = maxY - minY + 1
-console.log(`K bounds x:${minX}-${maxX} y:${minY}-${maxY} (${w}x${h})`)
+const SRC = 'raw-assets/kotil-favicon-source.png'
+const CREAM = '#f6eee3'
+await mkdir('public', { recursive: true })
 
-const pad = Math.round(Math.max(w, h) * 0.30)
-await sharp({ create: { width: 256, height: 256, channels: 4, background: NAVY } })
-  .composite([{
-    input: await sharp(SRC).extract({ left: minX, top: minY, width: w, height: h })
-      .resize(256 - pad * 2, 256 - pad * 2, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-      .png().toBuffer(),
-    gravity: 'centre',
-  }])
-  .png().toFile('public/favicon.png')
-console.log('favicon.png written')
+// 192px covers browser tabs, bookmarks and Android home-screen icons. The
+// transparent background lets the mark sit on any tab colour.
+const out = await sharp(SRC)
+  .resize(192, 192, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+  .png({ compressionLevel: 9 })
+  .toFile('public/favicon.png')
+console.log(`public/favicon.png          ${out.width}x${out.height}  ${(out.size / 1024).toFixed(1)}KB  (transparent)`)
+
+// iOS ignores transparency on home-screen icons and composites onto black,
+// which would hide a dark mark — so this one gets an opaque cream plate.
+const apple = await sharp(SRC)
+  .resize(150, 150, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+  .extend({ top: 15, bottom: 15, left: 15, right: 15, background: CREAM })
+  .flatten({ background: CREAM })
+  .png({ compressionLevel: 9 })
+  .toFile('public/apple-touch-icon.png')
+console.log(`public/apple-touch-icon.png ${apple.width}x${apple.height}  ${(apple.size / 1024).toFixed(1)}KB  (cream plate)`)
