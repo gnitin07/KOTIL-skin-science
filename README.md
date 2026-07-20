@@ -9,14 +9,22 @@ Built with Vite + React, GSAP ScrollTrigger and Lenis smooth scroll.
 
 ## Quick start
 
+The high-res source media is versioned with **Git LFS**, so install it *before*
+cloning or you'll get 130-byte pointer files instead of images:
+
 ```bash
+git lfs install                 # once per machine
+git clone https://github.com/gnitin07/KOTIL-skin-science.git
+cd KOTIL-skin-science
+
 npm install
 npm run dev        # http://localhost:5178
 npm run build      # production build -> dist/
 npm run preview    # serve the built site locally
 ```
 
-Requires Node 18+.
+Requires Node 18+. (LFS only affects `raw-assets/`; the site itself builds from
+the ordinary files in `public/`, so a clone without LFS still runs fine.)
 
 ---
 
@@ -55,7 +63,7 @@ public/
   clinic/             clinic gallery photos
   services/           one photo per treatment (generated, see below)
 scripts/              one-off asset pipeline tools (not part of the build)
-raw-assets/           original high-res source media — GIT-IGNORED
+raw-assets/           original high-res source media — tracked via Git LFS
 clinic/               original clinic photos as supplied
 ```
 
@@ -83,8 +91,8 @@ Change a number or address in `config.js` and the whole site follows.
 
 ## Asset pipeline
 
-Large originals live in `raw-assets/` (git-ignored). These scripts turn them into
-the web-sized files in `public/`. Run them only when source media changes.
+Large originals live in `raw-assets/` (Git LFS). These scripts turn them into the
+web-sized files in `public/`. Run them only when source media changes.
 
 ```bash
 npm run assets:optimize    # raw photos           -> public/assets/*.webp (98% smaller)
@@ -98,8 +106,10 @@ detecting the light "gutter" columns between cards, finds the photo band by
 looking for a *sustained* dark run (single dark rows are card borders), and trims
 the right edge so the source "% Off" badge never appears.
 
-> **Back up `raw-assets/` separately.** It is ~139 MB and deliberately excluded
-> from git; the repo only ships the optimised output.
+> `raw-assets/` is ~115 MB and lives in Git LFS. GitHub's free tier allows 1 GB
+> of LFS storage and 1 GB of bandwidth per month, so avoid repeatedly cloning
+> with LFS enabled. To skip the big files on a build machine:
+> `GIT_LFS_SKIP_SMUDGE=1 git clone …`
 
 ---
 
