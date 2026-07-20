@@ -244,7 +244,13 @@ section { position: relative; }
 .rig__slide p { max-width: 420px; margin-top: 18px; font-weight: 300; opacity: .82; font-size: clamp(14px, 1.5vw, 17px); }
 
 .rig__dots { position: absolute; bottom: 46px; left: clamp(20px, 6vw, 90px); z-index: 4; display: flex; gap: 10px; }
-.rig__dot { width: 26px; height: 3px; border-radius: 3px; background: rgba(246,238,227,.22); transition: background .35s, width .35s; }
+.rig__dot {
+  width: 26px; height: 3px; padding: 0; border: none; cursor: pointer;
+  border-radius: 3px; background: rgba(246,238,227,.22);
+  transition: background .35s, width .35s;
+}
+.rig__dot:hover { background: rgba(246,238,227,.5); }
+.rig__dot:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
 .rig__dot.is-on { background: var(--gold); width: 46px; }
 
 @media (max-width: 860px) {

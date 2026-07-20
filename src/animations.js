@@ -19,12 +19,21 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 export function useSiteAnimations(root, lenisRef) {
   useGSAP(() => {
     // ---- smooth scroll ----
-    const lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 1 })
-    lenisRef.current = lenis
-    lenis.on('scroll', ScrollTrigger.update)
-    const raf = (time) => { lenis.raf(time * 1000) }
-    gsap.ticker.add(raf)
-    gsap.ticker.lagSmoothing(0)
+    // Smooth scroll is a DESKTOP-only enhancement. On touch devices it fights the
+    // OS's native momentum scrolling and makes the page feel heavy/laggy, so we
+    // simply let the browser scroll natively there.
+    const useSmoothScroll = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    let lenis = null
+    let raf = null
+
+    if (useSmoothScroll) {
+      lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 1 })
+      lenisRef.current = lenis
+      lenis.on('scroll', ScrollTrigger.update)
+      raf = (time) => { lenis.raf(time * 1000) }
+      gsap.ticker.add(raf)
+      gsap.ticker.lagSmoothing(0)
+    }
     if (import.meta.env.DEV) { window.__lenis = lenis; window.__gsap = gsap; window.__ST = ScrollTrigger }
 
     // ---- navbar solidify ----
@@ -56,53 +65,86 @@ export function useSiteAnimations(root, lenisRef) {
       .to('.hero__media', { yPercent: 12, scale: 1.06, ease: 'none' }, 0)
       .to('.hero__copy', { yPercent: -55, opacity: 0, ease: 'none' }, 0)
 
-    // ================= MACHINE RIG: pinned, machines switch on scroll =================
+    // ================= MACHINE RIG: auto-advancing carousel =================
+    // Deliberately NOT scroll-pinned. Pinning + scrubbing hijacks the scroll,
+    // which feels broken on touch devices — you have to "scroll through" the
+    // section instead of just reading it. This plays itself instead.
     const machines = gsap.utils.toArray('.rig__machine')
     const slides = gsap.utils.toArray('.rig__slide')
     const dots = gsap.utils.toArray('.rig__dot')
     const count = machines.length
+    const SLIDE_MS = 3000
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    // initial state: only first visible
-    machines.forEach((m, i) => gsap.set(m, { autoAlpha: i === 0 ? 1 : 0, xPercent: i === 0 ? 0 : 14, scale: i === 0 ? 1 : 0.9 }))
-    slides.forEach((s, i) => gsap.set(s, { autoAlpha: i === 0 ? 1 : 0, yPercent: i === 0 ? 0 : 40 }))
-    dots.forEach((d, i) => d.classList.toggle('is-on', i === 0))
+    let current = 0
+    let timer = null
+    // Default TRUE: the observer below is only an optimisation to pause when the
+    // section is off-screen. If IntersectionObserver never delivers (throttled or
+    // background tabs don't always fire it) the carousel must still play, so we
+    // start optimistically and let the observer switch it off.
+    let inView = true
+    let paused = false
 
-    const rigTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.rig',
-        start: 'top top',
-        // Whole rig completes in ~one full viewport scroll. It used to be
-        // `innerHeight * count` (5 viewports = 3600px), which needed 4-5 wheel
-        // scrolls to get through all five machines.
-        end: () => '+=' + window.innerHeight,
-        pin: '.rig__inner',
-        // `transform` pinning instead of position:fixed. Fixed-position pinning makes
-        // the element shrink-to-fit, and if it's measured before layout settles GSAP
-        // bakes a garbage inline width (we saw 40px) that collapses the grid to 0px
-        // columns. transform pinning keeps the element in flow at its natural width.
-        pinType: 'transform',
-        anticipatePin: 1,
-        scrub: 0.4, // snappier: less lag between wheel and machine swap
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          // light up the dot for the current machine
-          const idx = Math.min(count - 1, Math.round(self.progress * (count - 1)))
-          dots.forEach((d, i) => d.classList.toggle('is-on', i === idx))
-        },
-      },
-    })
-
-    for (let i = 1; i < count; i++) {
-      rigTl
-        .to(machines[i - 1], { autoAlpha: 0, xPercent: -14, scale: 0.9, rotate: -2, ease: 'power2.inOut' }, i)
-        .fromTo(machines[i],
-          { autoAlpha: 0, xPercent: 14, scale: 0.9, rotate: 2 },
-          { autoAlpha: 1, xPercent: 0, scale: 1, rotate: 0, ease: 'power2.inOut' }, i)
-        .to(slides[i - 1], { autoAlpha: 0, yPercent: -40, ease: 'power2.inOut' }, i)
-        .fromTo(slides[i],
-          { autoAlpha: 0, yPercent: 40 },
-          { autoAlpha: 1, yPercent: 0, ease: 'power2.inOut' }, i)
+    const paint = (i) => {
+      machines.forEach((m, k) => gsap.set(m, { autoAlpha: k === i ? 1 : 0, xPercent: k === i ? 0 : 14, scale: k === i ? 1 : 0.9, rotate: 0 }))
+      slides.forEach((s, k) => gsap.set(s, { autoAlpha: k === i ? 1 : 0, yPercent: k === i ? 0 : 40 }))
+      dots.forEach((d, k) => {
+        d.classList.toggle('is-on', k === i)
+        d.setAttribute('aria-selected', String(k === i))
+      })
     }
+    paint(0)
+
+    /** Cross-fade to slide `next` (wraps). */
+    const goTo = (next) => {
+      if (next === current || count < 2) return
+      const prev = current
+      current = (next + count) % count
+      const D = reduceMotion ? 0 : 0.6
+      gsap.to(machines[prev], { autoAlpha: 0, xPercent: -14, scale: 0.9, rotate: -2, duration: D, ease: 'power2.inOut' })
+      gsap.fromTo(machines[current],
+        { autoAlpha: 0, xPercent: 14, scale: 0.9, rotate: 2 },
+        { autoAlpha: 1, xPercent: 0, scale: 1, rotate: 0, duration: D, ease: 'power2.inOut' })
+      gsap.to(slides[prev], { autoAlpha: 0, yPercent: -40, duration: D, ease: 'power2.inOut' })
+      gsap.fromTo(slides[current],
+        { autoAlpha: 0, yPercent: 40 },
+        { autoAlpha: 1, yPercent: 0, duration: D, ease: 'power2.inOut' })
+      dots.forEach((d, k) => {
+        d.classList.toggle('is-on', k === current)
+        d.setAttribute('aria-selected', String(k === current))
+      })
+    }
+
+    const stopAuto = () => { clearInterval(timer); timer = null }
+    const startAuto = () => {
+      stopAuto()
+      // only run while the section is actually on screen and not being touched
+      if (!inView || paused || count < 2) return
+      timer = setInterval(() => goTo(current + 1), SLIDE_MS)
+    }
+
+    // pause when off-screen so we aren't animating invisible things
+    const rigEl = document.querySelector('.rig')
+    const io = rigEl && new IntersectionObserver(
+      ([e]) => { inView = e.isIntersecting; startAuto() },
+      { threshold: 0.25 }
+    )
+    io?.observe(rigEl)
+
+    startAuto() // begin immediately; the observer only ever pauses it
+
+    // pause on hover/touch so a reader isn't yanked mid-sentence
+    const hold = () => { paused = true; stopAuto() }
+    const release = () => { paused = false; startAuto() }
+    const stage = document.querySelector('.rig__inner')
+    stage?.addEventListener('mouseenter', hold)
+    stage?.addEventListener('mouseleave', release)
+    stage?.addEventListener('touchstart', hold, { passive: true })
+    stage?.addEventListener('touchend', release, { passive: true })
+
+    // dots are real controls
+    const onDot = (i) => () => { goTo(i); paused = false; startAuto() }
+    const dotHandlers = dots.map((d, i) => { const h = onDot(i); d.addEventListener('click', h); return h })
 
     // gentle idle float on the whole stage
     gsap.to('.rig__stage', { y: -16, duration: 2.6, ease: 'sine.inOut', repeat: -1, yoyo: true })
@@ -199,7 +241,8 @@ export function useSiteAnimations(root, lenisRef) {
       const target = document.querySelector(id)
       if (!target) return
       e.preventDefault()
-      lenis.scrollTo(target, { offset: -1, duration: 1.1 })
+      if (lenis) lenis.scrollTo(target, { offset: -1, duration: 1.1 })
+      else target.scrollIntoView({ behavior: 'smooth', block: 'start' }) // native path (touch)
     }
     document.addEventListener('click', onAnchorClick)
 
@@ -218,8 +261,16 @@ export function useSiteAnimations(root, lenisRef) {
     return () => {
       document.removeEventListener('click', onAnchorClick)
       window.removeEventListener('load', refresh)
-      gsap.ticker.remove(raf)
-      lenis.destroy()
+      // carousel teardown (useGSAP only reverts GSAP, not DOM listeners/timers)
+      stopAuto()
+      io?.disconnect()
+      stage?.removeEventListener('mouseenter', hold)
+      stage?.removeEventListener('mouseleave', release)
+      stage?.removeEventListener('touchstart', hold)
+      stage?.removeEventListener('touchend', release)
+      dots.forEach((d, i) => d.removeEventListener('click', dotHandlers[i]))
+      if (raf) gsap.ticker.remove(raf)
+      lenis?.destroy()
     }
   }, { scope: root })
 }

@@ -131,8 +131,10 @@ export default function App() {
             ))}
           </div>
 
-          <div className="rig__dots">
-            {MACHINES.map((m) => <span className="rig__dot" key={m.id} />)}
+          <div className="rig__dots" role="tablist" aria-label="Choose a machine">
+            {MACHINES.map((m) => (
+              <button className="rig__dot" key={m.id} role="tab" aria-label={m.name} />
+            ))}
           </div>
         </div>
       </section>
