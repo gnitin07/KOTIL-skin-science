@@ -4,10 +4,9 @@ node_modules/
 # build output
 dist/
 
-# Large original source media (139 MB): raw machine photos, logo screenshot and
-# the services screenshots. These are only inputs to scripts/*.mjs — the built
-# web assets in public/ are what the site actually ships. Keep a separate backup.
-raw-assets/
+# NOTE: raw-assets/ is NOT ignored — it is versioned via Git LFS (see
+# .gitattributes). It holds the high-res originals that scripts/*.mjs turn into
+# the optimised files in public/. Run `git lfs install` after cloning.
 
 # logs & env
 *.log
