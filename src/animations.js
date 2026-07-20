@@ -174,20 +174,42 @@ export function useSiteAnimations(root, lenisRef) {
       y: 30, opacity: 0, duration: 1, ease: 'power2.out',
     })
 
-    // ---- treatments: horizontal pinned scroll ----
-    const track = document.querySelector('.treat__track')
-    if (track) {
-      const amount = () => track.scrollWidth - window.innerWidth + window.innerWidth * 0.06
-      gsap.to(track, {
-        x: () => -amount(), ease: 'none',
-        scrollTrigger: {
-          trigger: '.treat__pin', start: 'top top',
-          end: () => '+=' + amount(),
-          pin: true, pinType: 'transform', anticipatePin: 1,
-          scrub: 1, invalidateOnRefresh: true,
-        },
-      })
+    // ---- treatments: native swipeable row (no pin) ----
+    // Was a pinned horizontal scrub; same reason as the machine rig, it hijacked
+    // the scroll gesture. Now it's an ordinary overflow-x row the user can swipe
+    // or drag, with arrow buttons for mouse users.
+    const treatTrack = document.querySelector('.treat__track')
+    // Card-aware paging: snap to the next/previous card's own offset rather than
+    // nudging by a pixel guess, so scroll-snap can't leave us mid-card.
+    const nudgeTreat = (dir) => {
+      if (!treatTrack) return
+      // scrollLeft is measured from the content edge, which INCLUDES the track's
+      // left padding — subtract it or every target is off by one gutter and the
+      // snap yanks the row back.
+      const padL = parseFloat(getComputedStyle(treatTrack).paddingLeft) || 0
+      const lefts = [...treatTrack.children].map((c) => c.offsetLeft - treatTrack.offsetLeft - padL)
+      const here = treatTrack.scrollLeft
+      const target = dir > 0
+        ? lefts.find((l) => l > here + 8)
+        : [...lefts].reverse().find((l) => l < here - 8)
+      treatTrack.scrollTo({ left: target ?? (dir > 0 ? treatTrack.scrollWidth : 0), behavior: 'smooth' })
     }
+    const treatPrev = document.querySelector('.treat__arrow--prev')
+    const treatNext = document.querySelector('.treat__arrow--next')
+    const onTreatPrev = () => nudgeTreat(-1)
+    const onTreatNext = () => nudgeTreat(1)
+    treatPrev?.addEventListener('click', onTreatPrev)
+    treatNext?.addEventListener('click', onTreatNext)
+
+    // fade the arrows out at each end so the affordance stays honest
+    const syncTreatArrows = () => {
+      if (!treatTrack) return
+      const max = treatTrack.scrollWidth - treatTrack.clientWidth
+      treatPrev?.classList.toggle('is-off', treatTrack.scrollLeft <= 4)
+      treatNext?.classList.toggle('is-off', treatTrack.scrollLeft >= max - 4)
+    }
+    treatTrack?.addEventListener('scroll', syncTreatArrows, { passive: true })
+    syncTreatArrows()
 
     // ---- stats count-up ----
     gsap.utils.toArray('.stat h4').forEach((el) => {
@@ -269,6 +291,9 @@ export function useSiteAnimations(root, lenisRef) {
       stage?.removeEventListener('touchstart', hold)
       stage?.removeEventListener('touchend', release)
       dots.forEach((d, i) => d.removeEventListener('click', dotHandlers[i]))
+      treatPrev?.removeEventListener('click', onTreatPrev)
+      treatNext?.removeEventListener('click', onTreatNext)
+      treatTrack?.removeEventListener('scroll', syncTreatArrows)
       if (raf) gsap.ticker.remove(raf)
       lenis?.destroy()
     }

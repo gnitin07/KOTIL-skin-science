@@ -163,9 +163,14 @@ export default function App() {
         <div className="treat__head">
           <div className="kicker">Our Signature Treatments</div>
           <h2>Doctor-led. Visibly better.</h2>
+          <p className="treat__hint"><span className="treat__hint-ico">⇢</span> Slide to see all treatments</p>
         </div>
         <div className="treat__pin">
-          <div className="treat__track">
+          <button className="treat__arrow treat__arrow--prev" aria-label="Previous treatments">‹</button>
+          <button className="treat__arrow treat__arrow--next" aria-label="Next treatments">›</button>
+          {/* data-lenis-prevent: let the browser handle horizontal wheel/trackpad
+              scrolling here instead of Lenis swallowing the event */}
+          <div className="treat__track" data-lenis-prevent>
             {TREATMENTS.map((t) => (
               <article className="card" key={t.title}>
                 <img src={t.img} alt={t.title} />

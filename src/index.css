@@ -282,10 +282,42 @@ section { position: relative; }
 .treat__head { text-align: center; padding: clamp(70px,10vw,120px) 20px 10px; }
 .treat__head .kicker { color: var(--gold); font-weight: 600; letter-spacing: 3px; font-size: 13px; text-transform: uppercase; }
 .treat__head h2 { font-size: clamp(38px, 6vw, 84px); margin-top: 10px; color: var(--navy); }
-.treat__pin { height: 100vh; display: flex; align-items: center; overflow: hidden; }
-.treat__track { display: flex; gap: 34px; padding: 0 12vw; will-change: transform; }
+.treat__hint {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
+  font-size: 13.5px; font-weight: 500; letter-spacing: .4px;
+  color: var(--navy); opacity: .55;
+}
+.treat__hint-ico { font-size: 17px; color: var(--gold); animation: nudge 1.6s ease-in-out infinite; }
+@keyframes nudge { 0%,100% { transform: translateX(0) } 50% { transform: translateX(5px) } }
+
+/* Swipeable row — no longer scroll-pinned. */
+.treat__pin { position: relative; padding: 26px 0 40px; }
+.treat__track {
+  display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x proximity;
+  padding: 6px clamp(20px, 6vw, 90px) 22px; scroll-behavior: smooth;
+  /* align snapped cards to the padded edge, not the raw content edge */
+  scroll-padding-left: clamp(20px, 6vw, 90px);
+  scrollbar-width: thin; scrollbar-color: rgba(13,27,42,.28) transparent;
+}
+.treat__track::-webkit-scrollbar { height: 6px; }
+.treat__track::-webkit-scrollbar-thumb { background: rgba(13,27,42,.22); border-radius: 6px; }
+.treat__track::-webkit-scrollbar-track { background: transparent; }
+
+.treat__arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 4;
+  width: 48px; height: 48px; border-radius: 50%; border: none; cursor: pointer;
+  background: var(--navy); color: var(--gold-lite); font-size: 27px; line-height: 1;
+  display: grid; place-items: center; box-shadow: 0 12px 28px -10px rgba(13,27,42,.6);
+  transition: background .2s, color .2s, transform .2s var(--ease), opacity .3s;
+}
+.treat__arrow:hover { background: var(--gold); color: var(--navy); transform: translateY(-50%) scale(1.07); }
+.treat__arrow.is-off { opacity: 0; pointer-events: none; }
+.treat__arrow--prev { left: clamp(8px, 2vw, 26px); }
+.treat__arrow--next { right: clamp(8px, 2vw, 26px); }
+@media (max-width: 760px) { .treat__arrow { display: none; } }
 .card {
-  position: relative; flex: 0 0 auto; width: clamp(300px, 34vw, 460px); height: 62vh; min-height: 420px;
+  position: relative; flex: 0 0 clamp(280px, 31vw, 420px); scroll-snap-align: start;
+  height: clamp(430px, 60vh, 560px);
   border-radius: 26px; overflow: hidden; color: var(--white);
   box-shadow: 0 30px 60px -30px rgba(13,27,42,.55);
 }
