@@ -199,6 +199,10 @@ export default function App() {
 
       {/* TRUST BADGES */}
       <section className="stats">
+        <div className="stats__head">
+          <div className="kicker">Why patients choose Kotil</div>
+          <h2>Experience, proven technology and results you can check.</h2>
+        </div>
         <div className="stats__grid">
           {STATS.map((s) => (
             <article className="stat" key={s.label}>

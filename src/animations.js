@@ -214,6 +214,10 @@ export function useSiteAnimations(root, lenisRef) {
     // ---- trust badges: staggered card reveal ----
     // (was a numeric count-up; the badges now read "US FDA" / "4.5 / 5" etc,
     // so counting no longer applies)
+    gsap.from('.stats__head > *', {
+      y: 26, autoAlpha: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out',
+      scrollTrigger: { trigger: '.stats', start: 'top 82%' },
+    })
     gsap.from('.stat', {
       y: 28, autoAlpha: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out',
       scrollTrigger: { trigger: '.stats__grid', start: 'top 85%' },

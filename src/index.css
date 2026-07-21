@@ -342,6 +342,12 @@ section { position: relative; }
 /* Contained cards on their own light band. Previously these were bare numbers
    sitting straight on the navy, which read as floating and unaligned. */
 .stats { background: var(--cream); padding: clamp(52px,7vw,84px) clamp(20px,6vw,90px); }
+.stats__head { text-align: center; max-width: 780px; margin: 0 auto clamp(30px,4vw,46px); }
+.stats__head .kicker { color: var(--gold); font-weight: 600; letter-spacing: 3px; font-size: 13px; text-transform: uppercase; }
+.stats__head h2 {
+  font-weight: 800; letter-spacing: -0.02em; line-height: 1.12; margin-top: 10px;
+  font-size: clamp(28px,3.9vw,48px); color: var(--navy);
+}
 .stats__grid {
   max-width: 1160px; margin: 0 auto;
   display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(14px,2vw,24px);
