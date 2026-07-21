@@ -268,14 +268,6 @@ section { position: relative; }
 
 /* ---------- GLOW / RADIANCE ---------- */
 /* height:auto + min-height so the copy can never be clipped by overflow:hidden */
-.glow { min-height: 100vh; padding: clamp(70px,9vh,110px) 0; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--navy); }
-.glow__img { position: absolute; inset: 0; }
-.glow__img img { width: 100%; height: 100%; object-fit: cover; opacity: .85; will-change: transform; }
-.glow__veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(13,27,42,.92) 0%, rgba(13,27,42,.4) 45%, rgba(13,27,42,.15) 100%); }
-.glow__word { position: relative; z-index: 3; width: 100%; padding: 0 clamp(20px,6vw,90px); }
-.glow__word h2 { font-size: clamp(44px, 10.5vw, 160px); line-height: 0.95; color: var(--white); }
-.glow__word h2 em { font-style: normal; color: var(--gold); display: block; }
-.glow__word p { max-width: 440px; margin-top: 22px; font-weight: 300; opacity: .85; font-size: clamp(15px,1.6vw,18px); }
 
 /* ---------- TREATMENTS (horizontal pin) ---------- */
 .treat { background: var(--cream); color: var(--navy); }
@@ -580,6 +572,57 @@ section { position: relative; }
   padding: 18px; border-top: 1px solid rgba(246,238,227,.1); background: rgba(9,17,30,.6);
 }
 .allt__foot .btn-primary, .allt__foot .btn-ghost { padding: 12px 26px; font-size: 15px; }
+
+/* ---------- OUR RESULTS (before / after) ---------- */
+.results { background: var(--navy); padding: clamp(72px,10vw,120px) clamp(20px,6vw,90px); }
+.results__head { text-align: center; max-width: 720px; margin: 0 auto 44px; }
+.results__head .kicker { color: var(--gold); font-weight: 600; letter-spacing: 3px; font-size: 13px; text-transform: uppercase; }
+.results__head h2 { font-weight: 800; letter-spacing: -0.02em; font-size: clamp(32px,5vw,60px); color: var(--white); margin: 10px 0; }
+.results__head p { opacity: .7; font-weight: 300; font-size: clamp(14px,1.5vw,17px); }
+.results__grid {
+  max-width: 1240px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;
+}
+.rcard {
+  position: relative; margin: 0; border-radius: 18px; overflow: hidden;
+  background: #10203a; border: 1px solid rgba(227,166,59,.18);
+  box-shadow: 0 24px 50px -34px rgba(0,0,0,.8);
+}
+.rcard img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+.rcard__tag {
+  position: absolute; top: 12px; left: 12px;
+  background: rgba(9,17,30,.72); backdrop-filter: blur(6px);
+  color: var(--gold-lite); font-size: 11px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 12px; border-radius: 100px;
+}
+.rcard figcaption { padding: 14px 16px; font-size: 14px; font-weight: 500; color: var(--cream); opacity: .85; }
+.results__note { text-align: center; margin-top: 30px; font-size: 13px; opacity: .5; font-weight: 300; }
+
+/* ---------- VIDEO GALLERY ---------- */
+.vids { background: var(--cream); color: var(--navy); padding: clamp(72px,10vw,120px) clamp(20px,6vw,90px); }
+.vids__head { text-align: center; max-width: 720px; margin: 0 auto 44px; }
+.vids__head .kicker { color: var(--gold); font-weight: 600; letter-spacing: 3px; font-size: 13px; text-transform: uppercase; }
+.vids__head h2 { font-weight: 800; letter-spacing: -0.02em; font-size: clamp(32px,5vw,60px); color: var(--navy); margin: 10px 0; }
+.vids__head p { opacity: .65; font-weight: 300; font-size: clamp(14px,1.5vw,17px); }
+.vids__grid {
+  max-width: 1240px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;
+  align-items: start;
+}
+.vcard {
+  margin: 0; background: #fff; border-radius: 18px; overflow: hidden;
+  border: 1px solid rgba(13,27,42,.07);
+  box-shadow: 0 20px 44px -30px rgba(13,27,42,.4);
+  transition: transform .3s var(--ease), box-shadow .3s;
+}
+.vcard:hover { transform: translateY(-4px); box-shadow: 0 28px 54px -28px rgba(13,27,42,.5); }
+.vcard video {
+  width: 100%; display: block; background: #0a1520;
+  aspect-ratio: 16 / 9; object-fit: cover;
+}
+/* the phone reels are 9:16 — give them a portrait frame instead of cropping */
+.vcard video.is-vertical { aspect-ratio: 9 / 16; }
+.vcard figcaption { padding: 14px 16px; font-size: 14.5px; font-weight: 500; }
 
 /* ---------- CLINIC GALLERY (bento) ---------- */
 .gallery { background: var(--navy); padding: clamp(72px,10vw,120px) clamp(20px,6vw,90px); }

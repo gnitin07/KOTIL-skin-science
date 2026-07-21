@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { useSiteAnimations } from './animations.js'
-import { MACHINES, TREATMENTS, STATS, REVIEWS, REVIEW_RATING, FAQS, GALLERY, ALL_TREATMENTS } from './data.js'
+import { MACHINES, TREATMENTS, STATS, REVIEWS, REVIEW_RATING, FAQS, GALLERY, ALL_TREATMENTS, RESULTS, VIDEOS } from './data.js'
 import { CLINIC, SOCIALS, telLink, mailLink, bookLink, enquireLink, directionsLink, mapEmbedSrc } from './config.js'
 import { GoogleG, SOCIAL_ICONS, STAT_ICONS } from './components/icons.jsx'
 
@@ -65,8 +65,8 @@ export default function App() {
           <img src="/assets/kotil-logo-light.png" alt="Kotil Skin Science" />
         </a>
         <div className={`nav__links${menuOpen ? ' is-open' : ''}`} onClick={() => setMenuOpen(false)}>
-          <a href="#home">Home</a><a href="#tech">Technology</a>
-          <a href="#treatments">Treatments</a><a href="#gallery">Gallery</a>
+          <a href="#treatments">Services</a><a href="#tech">Technology</a>
+          <a href="#gallery">Gallery</a><a href="#videos">Videos</a>
           <a href="#reviews">Reviews</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
         </div>
         <div className="nav__right">
@@ -102,6 +102,85 @@ export default function App() {
           </div>
         </div>
         <div className="scroll-hint">Scroll</div>
+      </section>
+
+      {/* TRUST BADGES */}
+      <section className="stats">
+        <div className="stats__head">
+          <div className="kicker">Why patients choose Kotil</div>
+          <h2>Experience, proven technology and results you can check.</h2>
+        </div>
+        <div className="stats__grid">
+          {STATS.map((s) => (
+            <article className="stat" key={s.label}>
+              <span className="stat__ico">{STAT_ICONS[s.icon]}</span>
+              {/* the Google card reads its score from REVIEW_RATING so it can
+                  never disagree with the reviews section */}
+              <h4>{s.value ?? `${REVIEW_RATING.score} / 5`}</h4>
+              <p>{s.label}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* OUR RESULTS — before / after */}
+      {RESULTS.length > 0 && (
+        <section className="results" id="results">
+          <div className="results__head">
+            <div className="kicker">Our results</div>
+            <h2>Real skin. Real change.</h2>
+            <p>Actual outcomes from treatments carried out at our Preet Vihar clinic.</p>
+          </div>
+          <div className="results__grid">
+            {RESULTS.map((r) => (
+              <figure className="rcard" key={r.src}>
+                <img src={r.src} alt={r.alt} />
+                <span className="rcard__tag">Before / After</span>
+                <figcaption>{r.treatment}</figcaption>
+              </figure>
+            ))}
+          </div>
+          <p className="results__note">Individual results vary. Every plan begins with a consultation.</p>
+        </section>
+      )}
+
+      {/* TREATMENTS */}
+      <section className="treat" id="treatments">
+        <div className="treat__head">
+          <div className="kicker">Our Signature Treatments</div>
+          <h2>Doctor-led. Visibly better.</h2>
+          <p className="treat__hint"><span className="treat__hint-ico">⇢</span> Slide to see all treatments</p>
+        </div>
+        <div className="treat__pin">
+          <button className="treat__arrow treat__arrow--prev" aria-label="Previous treatments">‹</button>
+          <button className="treat__arrow treat__arrow--next" aria-label="Next treatments">›</button>
+          {/* data-lenis-prevent: let the browser handle horizontal wheel/trackpad
+              scrolling here instead of Lenis swallowing the event */}
+          <div className="treat__track" data-lenis-prevent>
+            {TREATMENTS.map((t) => (
+              <article className="card" key={t.title}>
+                <img src={t.img} alt={t.title} />
+                <div className="card__grad" />
+                <span className="card__off">{t.off}</span>
+                <div className="card__body">
+                  <h3>{t.title}</h3><p>{t.desc}</p>
+                  <a
+                    className="card__book"
+                    href={bookLink(t.title)}
+                    target="_blank" rel="noopener noreferrer"
+                  >Book appointment</a>
+                </div>
+              </article>
+            ))}
+            <button className="card card--more" onClick={() => setAllOpen(true)} aria-label="See all treatments">
+              <span className="card--more__ring">
+                <span className="card--more__arrow">→</span>
+              </span>
+              <h3>See more</h3>
+              <p>Browse all {ALL_TREATMENTS.reduce((n, g) => n + g.items.length, 0)} treatments we offer</p>
+            </button>
+          </div>
+        </div>
       </section>
 
       {/* MACHINE RIG — switches as you scroll */}
@@ -148,74 +227,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* GLOW */}
-      <section className="glow" id="glow">
-        <div className="glow__img"><img src="/assets/glow.webp" alt="Radiant skin" /></div>
-        <div className="glow__veil" />
-        <div className="glow__word">
-          <h2><span>Real</span> <em><span>Radiance.</span></em></h2>
-          <p>We don't believe in random treatments. Every plan starts with a diagnosis and is tailored to your unique skin type.</p>
-        </div>
-      </section>
-
-      {/* TREATMENTS */}
-      <section className="treat" id="treatments">
-        <div className="treat__head">
-          <div className="kicker">Our Signature Treatments</div>
-          <h2>Doctor-led. Visibly better.</h2>
-          <p className="treat__hint"><span className="treat__hint-ico">⇢</span> Slide to see all treatments</p>
-        </div>
-        <div className="treat__pin">
-          <button className="treat__arrow treat__arrow--prev" aria-label="Previous treatments">‹</button>
-          <button className="treat__arrow treat__arrow--next" aria-label="Next treatments">›</button>
-          {/* data-lenis-prevent: let the browser handle horizontal wheel/trackpad
-              scrolling here instead of Lenis swallowing the event */}
-          <div className="treat__track" data-lenis-prevent>
-            {TREATMENTS.map((t) => (
-              <article className="card" key={t.title}>
-                <img src={t.img} alt={t.title} />
-                <div className="card__grad" />
-                <span className="card__off">{t.off}</span>
-                <div className="card__body">
-                  <h3>{t.title}</h3><p>{t.desc}</p>
-                  <a
-                    className="card__book"
-                    href={bookLink(t.title)}
-                    target="_blank" rel="noopener noreferrer"
-                  >Book appointment</a>
-                </div>
-              </article>
-            ))}
-            <button className="card card--more" onClick={() => setAllOpen(true)} aria-label="See all treatments">
-              <span className="card--more__ring">
-                <span className="card--more__arrow">→</span>
-              </span>
-              <h3>See more</h3>
-              <p>Browse all {ALL_TREATMENTS.reduce((n, g) => n + g.items.length, 0)} treatments we offer</p>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* TRUST BADGES */}
-      <section className="stats">
-        <div className="stats__head">
-          <div className="kicker">Why patients choose Kotil</div>
-          <h2>Experience, proven technology and results you can check.</h2>
-        </div>
-        <div className="stats__grid">
-          {STATS.map((s) => (
-            <article className="stat" key={s.label}>
-              <span className="stat__ico">{STAT_ICONS[s.icon]}</span>
-              {/* the Google card reads its score from REVIEW_RATING so it can
-                  never disagree with the reviews section */}
-              <h4>{s.value ?? `${REVIEW_RATING.score} / 5`}</h4>
-              <p>{s.label}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
       {/* CLINIC GALLERY (bento) */}
       <section className="gallery" id="gallery">
         <div className="gallery__head">
@@ -230,6 +241,66 @@ export default function App() {
               <span className="gtile__zoom" aria-hidden>⤢</span>
             </button>
           ))}
+        </div>
+      </section>
+
+      {/* VIDEO GALLERY */}
+      <section className="vids" id="videos">
+        <div className="vids__head">
+          <div className="kicker">Inside the clinic</div>
+          <h2>See our treatments in action</h2>
+          <p>Short clips from real sessions at Kotil Skin Science.</p>
+        </div>
+        <div className="vids__grid">
+          {VIDEOS.map((v) => (
+            <figure className="vcard" key={v.src}>
+              <video
+                src={v.src}
+                poster={v.poster}
+                controls
+                preload="none"
+                playsInline
+                className={v.vertical ? 'is-vertical' : ''}
+              />
+              <figcaption>{v.title}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      {/* VISIT US / MAP */}
+      <section className="visit" id="contact">
+        <div className="visit__inner">
+          <div className="visit__copy">
+            <div className="kicker">Visit us</div>
+            <h2>Meet us in person at our <em>Delhi centre</em></h2>
+            <p>Prefer a face-to-face consultation? You're warmly welcome at our clinic. Sit down with our doctors, discuss your skin and hair concerns, and get a clear, personalised plan, in a calm, private setting.</p>
+            <ul className="visit__points">
+              <li><span className="visit__ico">📍</span><div><strong>{CLINIC.address.line1}, {CLINIC.address.line2}</strong><p>Near Nirman Vihar &amp; Laxmi Nagar. Easy to reach, comfortable and hygienic.</p></div></li>
+              <li><span className="visit__ico">🗓️</span><div><strong>By prior appointment</strong><p>Sessions are scheduled in advance so you get undivided attention.</p></div></li>
+              <li><span className="visit__ico">☎️</span><div><strong>Call / WhatsApp</strong><p>{CLINIC.phoneDisplay}. We'll guide you with directions and timings.</p></div></li>
+            </ul>
+            <div className="visit__btns">
+              <a className="btn-primary" href={directionsLink} target="_blank" rel="noopener noreferrer">Get directions ↗</a>
+              <a className="btn-ghost" href={enquireLink} target="_blank" rel="noopener noreferrer">Book appointment</a>
+            </div>
+          </div>
+          <div className="visit__map">
+            <iframe
+              title={`${CLINIC.name} location`}
+              src={mapEmbedSrc}
+              loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="cta">
+        <div className="kicker">Consultation First</div>
+        <h2><span>Book your</span> <span><em>glow-up.</em></span></h2>
+        <div className="cta__btns">
+          <a className="btn-primary" href={telLink}>☏ Call Now</a>
+          <a className="btn-ghost" href={enquireLink} target="_blank" rel="noopener noreferrer">✆ WhatsApp Appointment</a>
         </div>
       </section>
 
@@ -294,41 +365,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* VISIT US / MAP */}
-      <section className="visit" id="contact">
-        <div className="visit__inner">
-          <div className="visit__copy">
-            <div className="kicker">Visit us</div>
-            <h2>Meet us in person at our <em>Delhi centre</em></h2>
-            <p>Prefer a face-to-face consultation? You're warmly welcome at our clinic. Sit down with our doctors, discuss your skin and hair concerns, and get a clear, personalised plan, in a calm, private setting.</p>
-            <ul className="visit__points">
-              <li><span className="visit__ico">📍</span><div><strong>{CLINIC.address.line1}, {CLINIC.address.line2}</strong><p>Near Nirman Vihar &amp; Laxmi Nagar. Easy to reach, comfortable and hygienic.</p></div></li>
-              <li><span className="visit__ico">🗓️</span><div><strong>By prior appointment</strong><p>Sessions are scheduled in advance so you get undivided attention.</p></div></li>
-              <li><span className="visit__ico">☎️</span><div><strong>Call / WhatsApp</strong><p>{CLINIC.phoneDisplay}. We'll guide you with directions and timings.</p></div></li>
-            </ul>
-            <div className="visit__btns">
-              <a className="btn-primary" href={directionsLink} target="_blank" rel="noopener noreferrer">Get directions ↗</a>
-              <a className="btn-ghost" href={enquireLink} target="_blank" rel="noopener noreferrer">Book appointment</a>
-            </div>
-          </div>
-          <div className="visit__map">
-            <iframe
-              title={`${CLINIC.name} location`}
-              src={mapEmbedSrc}
-              loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="cta">
-        <div className="kicker">Consultation First</div>
-        <h2><span>Book your</span> <span><em>glow-up.</em></span></h2>
-        <div className="cta__btns">
-          <a className="btn-primary" href={telLink}>☏ Call Now</a>
-          <a className="btn-ghost" href={enquireLink} target="_blank" rel="noopener noreferrer">✆ WhatsApp Appointment</a>
-        </div>
-      </section>
       {/* FOOTER */}
       <footer className="footer">
         <div className="footer__main">

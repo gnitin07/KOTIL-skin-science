@@ -162,17 +162,7 @@ export function useSiteAnimations(root, lenisRef) {
       },
     })
 
-    // ---- glow: image parallax zoom + word reveal ----
-    gsap.timeline({ scrollTrigger: { trigger: '.glow', start: 'top bottom', end: 'bottom top', scrub: 1 } })
-      .fromTo('.glow__img img', { scale: 1.35, yPercent: -6 }, { scale: 1.05, yPercent: 6, ease: 'none' }, 0)
-    gsap.from('.glow__word h2 span', {
-      scrollTrigger: { trigger: '.glow', start: 'top 65%' },
-      yPercent: 120, opacity: 0, duration: 1.1, stagger: 0.14, ease: 'power4.out',
-    })
-    gsap.from('.glow__word p', {
-      scrollTrigger: { trigger: '.glow', start: 'top 50%' },
-      y: 30, opacity: 0, duration: 1, ease: 'power2.out',
-    })
+    // (the "Real Radiance" glow section was removed; its timelines went with it)
 
     // ---- treatments: native swipeable row (no pin) ----
     // Was a pinned horizontal scrub; same reason as the machine rig, it hijacked
@@ -230,6 +220,10 @@ export function useSiteAnimations(root, lenisRef) {
         scrollTrigger: { trigger: trigger || selector, start: 'top 82%' },
       })
     }
+    revealBatch('.results__head > *', '.results')
+    revealBatch('.rcard', '.results__grid')
+    revealBatch('.vids__head > *', '.vids')
+    revealBatch('.vcard', '.vids__grid')
     revealBatch('.gallery__head > *', '.gallery')
     revealBatch('.gtile', '.gallery__grid')
     revealBatch('.reviews__head > *', '.reviews')
