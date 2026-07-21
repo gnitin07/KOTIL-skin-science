@@ -103,11 +103,14 @@ export const ALL_TREATMENTS = [
   ]},
 ]
 
+// Trust badges, matching the ones on the live site. `icon` maps to STAT_ICONS.
+// The Google rating is filled in from REVIEW_RATING below so the badge can never
+// contradict the reviews section.
 export const STATS = [
-  { n: 12000, suffix: '+', label: 'Treatments delivered' },
-  { n: 15, suffix: '+', label: 'Years of expertise' },
-  { n: 98, suffix: '%', label: 'Client satisfaction' },
-  { n: 40, suffix: '+', label: 'Skin & hair concerns' },
+  { icon: 'trophy', value: '15+ Years', label: 'Experience' },
+  { icon: 'verified', value: 'US FDA', label: 'Approved Technology' },
+  { icon: 'users', value: '20K+', label: 'Happy Patients' },
+  { icon: 'google', value: null, label: 'Google Reviews' }, // value = `${score} / 5`
 ]
 
 // Real Google reviews for Kotil Skin Science (from the clinic's Google listing —

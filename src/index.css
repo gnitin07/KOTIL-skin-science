@@ -338,10 +338,41 @@ section { position: relative; }
 .card__book:hover { filter: brightness(1.06); transform: translateY(-2px); box-shadow: 0 14px 30px -10px rgba(227,166,59,1); }
 
 /* ---------- STATS ---------- */
-.stats { background: var(--navy); padding: clamp(44px,6vw,72px) clamp(20px,6vw,90px); display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: clamp(20px,3vw,40px); }
-.stat { min-width: 0; }
-.stat h4 { font-family: var(--font); font-weight: 800; letter-spacing: -0.02em; font-size: clamp(34px,4.2vw,58px); line-height: 1; color: var(--gold); white-space: nowrap; }
-.stat p { opacity: .7; font-weight: 300; margin-top: 8px; letter-spacing: .3px; font-size: clamp(13px,1.4vw,15.5px); }
+/* ---------- TRUST BADGES ---------- */
+/* Contained cards on their own light band. Previously these were bare numbers
+   sitting straight on the navy, which read as floating and unaligned. */
+.stats { background: var(--cream); padding: clamp(52px,7vw,84px) clamp(20px,6vw,90px); }
+.stats__grid {
+  max-width: 1160px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(14px,2vw,24px);
+}
+.stat {
+  position: relative; overflow: hidden; text-align: center;
+  background: #fff; border: 1px solid rgba(13,27,42,.07); border-radius: 20px;
+  padding: clamp(24px,3vw,34px) clamp(14px,2vw,22px);
+  box-shadow: 0 18px 40px -30px rgba(13,27,42,.45);
+  transition: transform .3s var(--ease), box-shadow .3s, border-color .3s;
+}
+/* soft decorative blob in the top-right, like the reference */
+.stat::before {
+  content: ""; position: absolute; top: -34px; right: -34px; width: 96px; height: 96px;
+  border-radius: 50%; background: rgba(227,166,59,.13); pointer-events: none;
+}
+.stat:hover { transform: translateY(-4px); border-color: rgba(227,166,59,.45); box-shadow: 0 26px 50px -28px rgba(13,27,42,.5); }
+.stat__ico {
+  position: relative; z-index: 1;
+  width: 58px; height: 58px; margin: 0 auto 16px;
+  display: grid; place-items: center; border-radius: 50%;
+  background: rgba(227,166,59,.16); color: var(--gold);
+}
+.stat h4 {
+  position: relative; z-index: 1;
+  font-weight: 800; letter-spacing: -0.02em; line-height: 1.1;
+  font-size: clamp(20px,2.1vw,27px); color: var(--navy);
+}
+.stat p { margin-top: 6px; font-weight: 400; opacity: .62; font-size: clamp(13px,1.35vw,15px); color: var(--navy); }
+
+@media (max-width: 760px) { .stats__grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 620px) { .stats { grid-template-columns: repeat(2, 1fr); } }
 
 /* ---------- CTA / FOOTER ---------- */

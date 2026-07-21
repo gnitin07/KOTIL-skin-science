@@ -10,6 +10,20 @@ export const GoogleG = ({ size = 22 }) => (
   </svg>
 )
 
+/** Trust-badge icons, keyed to `icon` on each entry in data.STATS. */
+export const STAT_ICONS = {
+  trophy: (
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden><path d="M18 3h2a1 1 0 0 1 1 1v2a4 4 0 0 1-3.4 3.95A6 6 0 0 1 13 13.9V17h2.5a1 1 0 0 1 0 2h-7a1 1 0 0 1 0-2H11v-3.1a6 6 0 0 1-4.6-3.95A4 4 0 0 1 3 6V4a1 1 0 0 1 1-1h2V2h12v1Zm0 2v3.83A2 2 0 0 0 19 6V5h-1ZM5 5v1a2 2 0 0 0 1 1.83V5H5Zm3-1v5a4 4 0 1 0 8 0V4H8ZM6 20h12a1 1 0 0 1 0 2H6a1 1 0 0 1 0-2Z"/></svg>
+  ),
+  verified: (
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden><path d="m12 1.5 2.4 1.75 2.95-.02 1 2.8 2.4 1.72-.93 2.8.93 2.8-2.4 1.72-1 2.8-2.95-.02L12 19.6l-2.4-1.75-2.95.02-1-2.8-2.4-1.72.93-2.8-.93-2.8 2.4-1.72 1-2.8 2.95.02L12 1.5Zm-1.2 12.4 5.3-5.3-1.42-1.4-3.88 3.88-1.88-1.88-1.42 1.42 3.3 3.28ZM8.2 20.1l2.05 1.5a3 3 0 0 0 3.5 0l2.05-1.5.7 2.4-4.5-1.1-4.5 1.1.7-2.4Z"/></svg>
+  ),
+  users: (
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-3.33 0-8 1.67-8 4.5V21h16v-3.5C17 14.67 12.33 13 9 13Zm8.5-2a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5 2c-.7 0-1.5.08-2.3.24 1.5 1.1 2.3 2.5 2.3 4.26V21h5v-3.5c0-2.5-3.6-4.5-7-4.5Z"/></svg>
+  ),
+  google: <GoogleG size={26} />,
+}
+
 /** Social marks, keyed to the `id` of each entry in config.SOCIALS. */
 export const SOCIAL_ICONS = {
   ig: (

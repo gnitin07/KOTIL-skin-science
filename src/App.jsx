@@ -2,7 +2,7 @@ import { useRef, useState, useEffect, useCallback } from 'react'
 import { useSiteAnimations } from './animations.js'
 import { MACHINES, TREATMENTS, STATS, REVIEWS, REVIEW_RATING, FAQS, GALLERY, ALL_TREATMENTS } from './data.js'
 import { CLINIC, SOCIALS, telLink, mailLink, bookLink, enquireLink, directionsLink, mapEmbedSrc } from './config.js'
-import { GoogleG, SOCIAL_ICONS } from './components/icons.jsx'
+import { GoogleG, SOCIAL_ICONS, STAT_ICONS } from './components/icons.jsx'
 
 export default function App() {
   const root = useRef(null)
@@ -197,13 +197,19 @@ export default function App() {
         </div>
       </section>
 
-      {/* STATS */}
+      {/* TRUST BADGES */}
       <section className="stats">
-        {STATS.map((s) => (
-          <div className="stat" key={s.label}>
-            <h4 data-n={s.n}>0{s.suffix}</h4><p>{s.label}</p>
-          </div>
-        ))}
+        <div className="stats__grid">
+          {STATS.map((s) => (
+            <article className="stat" key={s.label}>
+              <span className="stat__ico">{STAT_ICONS[s.icon]}</span>
+              {/* the Google card reads its score from REVIEW_RATING so it can
+                  never disagree with the reviews section */}
+              <h4>{s.value ?? `${REVIEW_RATING.score} / 5`}</h4>
+              <p>{s.label}</p>
+            </article>
+          ))}
+        </div>
       </section>
 
       {/* CLINIC GALLERY (bento) */}

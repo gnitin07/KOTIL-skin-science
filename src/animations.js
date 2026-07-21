@@ -211,15 +211,12 @@ export function useSiteAnimations(root, lenisRef) {
     treatTrack?.addEventListener('scroll', syncTreatArrows, { passive: true })
     syncTreatArrows()
 
-    // ---- stats count-up ----
-    gsap.utils.toArray('.stat h4').forEach((el) => {
-      const target = +el.dataset.n
-      const obj = { v: 0 }
-      gsap.to(obj, {
-        v: target, duration: 1.6, ease: 'power2.out',
-        scrollTrigger: { trigger: el, start: 'top 85%' },
-        onUpdate: () => { el.firstChild.textContent = Math.round(obj.v).toLocaleString() },
-      })
+    // ---- trust badges: staggered card reveal ----
+    // (was a numeric count-up; the badges now read "US FDA" / "4.5 / 5" etc,
+    // so counting no longer applies)
+    gsap.from('.stat', {
+      y: 28, autoAlpha: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out',
+      scrollTrigger: { trigger: '.stats__grid', start: 'top 85%' },
     })
 
     // ---- reveals for reviews / faq / visit ----
