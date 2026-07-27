@@ -252,42 +252,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* VISIT US / MAP */}
-      <section className="visit" id="contact">
-        <div className="visit__inner">
-          <div className="visit__copy">
-            <div className="kicker">Visit us</div>
-            <h2>Meet us in person at our <em>Delhi centre</em></h2>
-            <p>Prefer a face-to-face consultation? You're warmly welcome at our clinic. Sit down with our doctors, discuss your skin and hair concerns, and get a clear, personalised plan, in a calm, private setting.</p>
-            <ul className="visit__points">
-              <li><span className="visit__ico">📍</span><div><strong>{CLINIC.address.line1}, {CLINIC.address.line2}</strong><p>Near Nirman Vihar &amp; Laxmi Nagar. Easy to reach, comfortable and hygienic.</p></div></li>
-              <li><span className="visit__ico">🗓️</span><div><strong>By prior appointment</strong><p>Sessions are scheduled in advance so you get undivided attention.</p></div></li>
-              <li><span className="visit__ico">☎️</span><div><strong>Call / WhatsApp</strong><p>{CLINIC.phoneDisplay}. We'll guide you with directions and timings.</p></div></li>
-            </ul>
-            <div className="visit__btns">
-              <a className="btn-primary" href={directionsLink} target="_blank" rel="noopener noreferrer">Get directions ↗</a>
-              <a className="btn-ghost" href={enquireLink} target="_blank" rel="noopener noreferrer">Book appointment</a>
-            </div>
-          </div>
-          <div className="visit__map">
-            <iframe
-              title={`${CLINIC.name} location`}
-              src={mapEmbedSrc}
-              loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="cta">
-        <div className="kicker">Consultation First</div>
-        <h2><span>Book your</span> <span><em>glow-up.</em></span></h2>
-        <div className="cta__btns">
-          <a className="btn-primary" href={telLink}>☏ Call Now</a>
-          <a className="btn-ghost" href={enquireLink} target="_blank" rel="noopener noreferrer">✆ WhatsApp Appointment</a>
-        </div>
-      </section>
-
       {/* REVIEWS */}
       <section className="reviews" id="reviews">
         <div className="reviews__head">
@@ -332,6 +296,16 @@ export default function App() {
         </div>
       </section>
 
+      {/* CTA — the booking prompt lands right after the social proof */}
+      <section className="cta">
+        <div className="kicker">Consultation First</div>
+        <h2><span>Book your</span> <span><em>glow-up.</em></span></h2>
+        <div className="cta__btns">
+          <a className="btn-primary" href={telLink}>☏ Call Now</a>
+          <a className="btn-ghost" href={enquireLink} target="_blank" rel="noopener noreferrer">✆ WhatsApp Appointment</a>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section className="faq" id="faq">
         <div className="faq__head">
@@ -346,6 +320,32 @@ export default function App() {
               <div className="faq__ans"><p>{f.a}</p></div>
             </details>
           ))}
+        </div>
+      </section>
+
+      {/* VISIT US / MAP — last stop before the footer */}
+      <section className="visit" id="contact">
+        <div className="visit__inner">
+          <div className="visit__copy">
+            <div className="kicker">Visit us</div>
+            <h2>Meet us in person at our <em>Delhi centre</em></h2>
+            <p>Prefer a face-to-face consultation? You're warmly welcome at our clinic. Sit down with our doctors, discuss your skin and hair concerns, and get a clear, personalised plan, in a calm, private setting.</p>
+            <ul className="visit__points">
+              <li><span className="visit__ico">📍</span><div><strong>{CLINIC.address.line1}, {CLINIC.address.line2}</strong><p>Near Nirman Vihar &amp; Laxmi Nagar. Easy to reach, comfortable and hygienic.</p></div></li>
+              <li><span className="visit__ico">🗓️</span><div><strong>By prior appointment</strong><p>Sessions are scheduled in advance so you get undivided attention.</p></div></li>
+              <li><span className="visit__ico">☎️</span><div><strong>Call / WhatsApp</strong><p>{CLINIC.phoneDisplay}. We'll guide you with directions and timings.</p></div></li>
+            </ul>
+            <div className="visit__btns">
+              <a className="btn-primary" href={directionsLink} target="_blank" rel="noopener noreferrer">Get directions ↗</a>
+              <a className="btn-ghost" href={enquireLink} target="_blank" rel="noopener noreferrer">Book appointment</a>
+            </div>
+          </div>
+          <div className="visit__map">
+            <iframe
+              title={`${CLINIC.name} location`}
+              src={mapEmbedSrc}
+              loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+          </div>
         </div>
       </section>
 
