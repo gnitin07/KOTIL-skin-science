@@ -292,7 +292,9 @@ section { position: relative; }
   /* centred via auto margins, NOT translateX(-50%) — GSAP owns `transform`
      here (xPercent/scale/rotate) and would wipe out any CSS translate. */
   position: absolute; bottom: 0; left: 0; right: 0; margin-inline: auto;
-  height: 100%; width: auto; max-width: none; object-fit: contain; object-position: bottom center;
+  /* max-width caps the wider treatment scenes to the stage instead of bleeding
+     past it; object-fit keeps them undistorted */
+  height: 100%; width: auto; max-width: 100%; object-fit: contain; object-position: bottom center;
   /* NO filter here: drop-shadow on a 1500px image re-rasterises every frame
      while these crossfade, which is what made the scroll janky. The floor
      shadow below is a cheap static stand-in. */

@@ -1,4 +1,5 @@
-// Real machines used at the clinic — each shot pairs the device with our expert.
+// Machines used at the clinic. Each shot is a treatment IN PROGRESS — expert,
+// patient and device together — not a vendor-style photo of the device alone.
 export const MACHINES = [
   {
     id: 'hifu',
