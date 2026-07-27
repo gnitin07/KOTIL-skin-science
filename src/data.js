@@ -145,7 +145,7 @@ export const VIDEOS = [
   { src: '/videos/vid-20231004-135808.mp4', poster: '/videos/vid-20231004-135808.webp', title: 'Skin treatment close-up', vertical: true },
   { src: '/videos/vid-20231004-140801.mp4', poster: '/videos/vid-20231004-140801.webp', title: 'Inside the treatment room', vertical: true },
   { src: '/videos/inshot-20250119-181127074.mp4', poster: '/videos/inshot-20250119-181127074.webp', title: 'A visit to Kotil Skin Science', vertical: true },
-  { src: '/videos/vid-20250605-174514.mp4', poster: '/videos/vid-20250605-174514.webp', title: 'Clinic walkthrough', vertical: false },
+  { src: '/videos/vid-20250605-174514.mp4', poster: '/videos/vid-20250605-174514.webp', title: 'Clinic walkthrough', vertical: true },
 ]
 
 // Clinic gallery — real photos. `cls` places each tile explicitly so the bento
