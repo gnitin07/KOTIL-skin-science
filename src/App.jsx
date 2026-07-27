@@ -154,14 +154,15 @@ export default function App() {
                 </div>
               </article>
             ))}
-            <button className="card card--more" onClick={() => setAllOpen(true)} aria-label="See all treatments">
-              <span className="card--more__ring">
-                <span className="card--more__arrow">→</span>
-              </span>
-              <h3>See more</h3>
-              <p>Browse all {ALL_TREATMENTS.reduce((n, g) => n + g.items.length, 0)} treatments we offer</p>
-            </button>
           </div>
+        </div>
+        {/* floating "see more" — always visible below the row, so users never
+            have to slide to the end to reach the full menu */}
+        <div className="treat__foot">
+          <button className="treat__seeall" onClick={() => setAllOpen(true)}>
+            See all {ALL_TREATMENTS.reduce((n, g) => n + g.items.length, 0)} treatments
+            <span className="treat__seeall-ico" aria-hidden="true">→</span>
+          </button>
         </div>
       </section>
 
