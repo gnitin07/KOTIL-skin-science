@@ -1,3 +1,5 @@
+import { bookLink } from './config.js'
+
 // Machines used at the clinic. Each shot is a treatment IN PROGRESS — expert,
 // patient and device together — not a vendor-style photo of the device alone.
 export const MACHINES = [
@@ -123,16 +125,25 @@ export const REVIEWS = [
   { name: 'Pooja Sharma', when: '3 months ago', stars: 5, text: 'Went in for pigmentation treatment. Proper diagnosis first, no random packages pushed, genuinely doctor-led. Very happy with the results.' },
 ]
 
-export const REVIEW_RATING = { score: '4.5', count: 118, url: 'https://www.google.com/search?q=Kotil+Skin+Science+reviews' }
+// url: the #lrd fragment opens Google's review panel for THIS listing directly,
+// instead of dropping people on a plain search results page.
+export const REVIEW_RATING = {
+  score: '4.5',
+  count: 118,
+  url: 'https://www.google.com/search?q=Kotil+Skin+Science+reviews#lrd=0x390cfb47f47a0b8b:0xa11889d3fd01ecd7,1,,,,',
+}
 
 // Hero banner slides. Each has a landscape (desktop) and portrait (mobile)
 // image; the carousel picks the right one per viewport. `href` is the click
 // target (the CTA baked into each banner). Optimise via `npm run assets:banners`.
 export const BANNERS = [
-  { id: 'monsoon', desktop: '/banners/1-monsoon-desktop.webp', mobile: '/banners/1-monsoon-mobile.webp', alt: 'Monsoon Special Offer: flat up to 30% off on all treatments', href: '#treatments' },
-  { id: 'lhr',     desktop: '/banners/2-lhr-desktop.webp',     mobile: '/banners/2-lhr-mobile.webp',     alt: 'Advanced Laser Hair Reduction with Soprano Titanium technology', href: '#treatments' },
-  { id: 'hydra',   desktop: '/banners/3-hydra-desktop.webp',   mobile: '/banners/3-hydra-mobile.webp',   alt: 'Advanced 17-in-1 Hydra Facial technology', href: '#treatments' },
-  { id: 'hifu',    desktop: '/banners/4-hifu-desktop.webp',    mobile: '/banners/4-hifu-mobile.webp',    alt: 'Non-surgical HIFU skin tightening and facial lift', href: '#treatments' },
+  // The monsoon slide is a whole-clinic offer, so it scrolls to the full menu.
+  // Every other slide sells ONE treatment, so it opens WhatsApp with that
+  // treatment already written into the message (see bookLink in config.js).
+  { id: 'monsoon', desktop: '/banners/1-monsoon-desktop.webp', mobile: '/banners/1-monsoon-mobile.webp', alt: 'Monsoon Special Offer: flat up to 30% off on all treatments', href: '#treatments', cta: 'See all treatments' },
+  { id: 'lhr',     desktop: '/banners/2-lhr-desktop.webp',     mobile: '/banners/2-lhr-mobile.webp',     alt: 'Advanced Laser Hair Reduction with Soprano Titanium technology', href: bookLink('Laser Hair Reduction'), cta: 'Book Laser Hair Reduction on WhatsApp' },
+  { id: 'hydra',   desktop: '/banners/3-hydra-desktop.webp',   mobile: '/banners/3-hydra-mobile.webp',   alt: 'Advanced 17-in-1 Hydra Facial technology', href: bookLink('the 17-in-1 Hydra Facial'), cta: 'Book the 17-in-1 Hydra Facial on WhatsApp' },
+  { id: 'hifu',    desktop: '/banners/4-hifu-desktop.webp',    mobile: '/banners/4-hifu-mobile.webp',    alt: 'Non-surgical HIFU skin tightening and facial lift', href: bookLink('HIFU Skin Tightening & Facial Lift'), cta: 'Book HIFU Skin Tightening on WhatsApp' },
 ]
 
 // Before/after results. Populate by dropping the originals into

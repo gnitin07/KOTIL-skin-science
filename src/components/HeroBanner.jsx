@@ -70,6 +70,12 @@ export default function HeroBanner() {
           <a
             className={`hbanner__slide${i === index ? ' is-active' : ''}`}
             key={b.id} href={b.href}
+            /* WhatsApp slides leave the site, so they open in a new tab; the
+               monsoon slide is an in-page anchor and must stay in this one. */
+            {...(b.href.startsWith('#')
+              ? {}
+              : { target: '_blank', rel: 'noopener noreferrer' })}
+            aria-label={b.cta}
             aria-hidden={i !== index} tabIndex={i === index ? 0 : -1}
           >
             <picture>
