@@ -556,6 +556,10 @@ section { position: relative; }
 .reviews__cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 40px; }
 .reviews__gbtn { display: inline-flex; align-items: center; gap: 10px; background: #fff; color: var(--navy); border: 1px solid rgba(13,27,42,.12); }
 .reviews__gbtn:hover { box-shadow: 0 14px 30px -10px rgba(13,27,42,.28); }
+/* .btn-ghost is cream-on-transparent for the dark sections. This section is
+   cream, so the label was cream-on-cream — invisible. Repaint it navy here. */
+.reviews .btn-ghost { color: var(--navy); border-color: rgba(13,27,42,.3); }
+.reviews .btn-ghost:hover { border-color: var(--gold); background: rgba(227,166,59,.12); color: var(--navy); }
 
 /* ---------- "SEE MORE" CARD (end of treatments track) ---------- */
 /* floating "see all treatments" button below the row */

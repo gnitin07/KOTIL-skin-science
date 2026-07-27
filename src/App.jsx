@@ -292,7 +292,7 @@ export default function App() {
 
         <div className="reviews__cta">
           <a className="btn-primary reviews__gbtn" href={REVIEW_RATING.url} target="_blank" rel="noopener noreferrer"><GoogleG size={20} /> Read all {REVIEW_RATING.count}+ reviews on Google</a>
-          <a className="btn-ghost" href={REVIEW_RATING.url} target="_blank" rel="noopener noreferrer">✎ Write a review</a>
+          <a className="btn-ghost" href={REVIEW_RATING.writeUrl} target="_blank" rel="noopener noreferrer">✎ Write a review</a>
         </div>
       </section>
 

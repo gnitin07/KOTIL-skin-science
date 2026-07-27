@@ -125,12 +125,14 @@ export const REVIEWS = [
   { name: 'Pooja Sharma', when: '3 months ago', stars: 5, text: 'Went in for pigmentation treatment. Proper diagnosis first, no random packages pushed, genuinely doctor-led. Very happy with the results.' },
 ]
 
-// url: the #lrd fragment opens Google's review panel for THIS listing directly,
-// instead of dropping people on a plain search results page.
+// The #lrd fragment opens Google's panel for THIS listing rather than a plain
+// search page. The trailing index picks the tab: ,1, = read reviews,
+// ,3, = write a review.
 export const REVIEW_RATING = {
   score: '4.5',
   count: 118,
   url: 'https://www.google.com/search?q=Kotil+Skin+Science+reviews#lrd=0x390cfb47f47a0b8b:0xa11889d3fd01ecd7,1,,,,',
+  writeUrl: 'https://www.google.com/search?q=Kotil+Skin+Science+reviews#lrd=0x390cfb47f47a0b8b:0xa11889d3fd01ecd7,3,,,,',
 }
 
 // Hero banner slides. Each has a landscape (desktop) and portrait (mobile)
