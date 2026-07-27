@@ -676,29 +676,49 @@ section { position: relative; }
 .vids__head .kicker { color: var(--gold); font-weight: 600; letter-spacing: 3px; font-size: 13px; text-transform: uppercase; }
 .vids__head h2 { font-weight: 800; letter-spacing: -0.02em; font-size: clamp(32px,5vw,60px); color: var(--navy); margin: 10px 0; }
 .vids__head p { opacity: .65; font-weight: 300; font-size: clamp(14px,1.5vw,17px); }
-/* Centered wrapping row, not a rigid grid: a partial last row centres itself
-   instead of leaving a hole on the right. */
+/* Bento — one feature clip + four, tiling a perfect rectangle with zero gaps.
+   The container's aspect-ratio drives the row height, so every tile stays
+   portrait (~0.62, close to the clips' native 9:16) at any width. */
 .vids__grid {
   max-width: 1240px; margin: 0 auto;
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  aspect-ratio: 1240 / 980;
+  gap: 14px;
 }
+/* row1-4: [A A B C]  /  [A A B C]  /  [A A D E]  /  [A A D E] */
+.vcard--a { grid-column: 1 / 3; grid-row: 1 / 5; }
+.vcard--b { grid-column: 3;     grid-row: 1 / 3; }
+.vcard--c { grid-column: 4;     grid-row: 1 / 3; }
+.vcard--d { grid-column: 3;     grid-row: 3 / 5; }
+.vcard--e { grid-column: 4;     grid-row: 3 / 5; }
 .vcard {
-  flex: 1 1 200px; max-width: 264px;   /* capped so a lone trailing card can't blow up */
-  margin: 0; background: #fff; border-radius: 18px; overflow: hidden;
-  border: 1px solid rgba(13,27,42,.07);
+  position: relative; margin: 0; overflow: hidden; border-radius: 16px;
+  background: #0a1520;
   box-shadow: 0 20px 44px -30px rgba(13,27,42,.4);
   transition: transform .3s var(--ease), box-shadow .3s;
 }
 .vcard:hover { transform: translateY(-4px); box-shadow: 0 28px 54px -28px rgba(13,27,42,.5); }
-/* single column on phones — let the card fill instead of sitting narrow and boxed-in */
-@media (max-width: 560px) { .vcard { max-width: none; } }
 .vcard video {
-  width: 100%; display: block; background: #0a1520;
-  aspect-ratio: 16 / 9; object-fit: cover;
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; display: block; background: #0a1520;
 }
-/* the phone reels are 9:16 — give them a portrait frame instead of cropping */
-.vcard video.is-vertical { aspect-ratio: 9 / 16; }
-.vcard figcaption { padding: 14px 16px; font-size: 14.5px; font-weight: 500; }
+/* caption sits at the TOP so it never covers the native control bar */
+.vcard figcaption {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 2; pointer-events: none;
+  padding: 13px 16px 30px; color: #fff; font-size: 14.5px; font-weight: 500;
+  background: linear-gradient(180deg, rgba(9,17,30,.82), transparent);
+}
+@media (max-width: 780px) {
+  /* 2 cols: A spans the full width over 2 rows, then B C / D E — still exact */
+  .vids__grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 76vw); aspect-ratio: auto; gap: 10px; }
+  .vcard--a { grid-column: 1 / 3; grid-row: 1 / 3; }
+  .vcard--b { grid-column: 1; grid-row: 3; }
+  .vcard--c { grid-column: 2; grid-row: 3; }
+  .vcard--d { grid-column: 1; grid-row: 4; }
+  .vcard--e { grid-column: 2; grid-row: 4; }
+}
 
 /* ---------- CLINIC GALLERY (bento) ---------- */
 .gallery { background: var(--navy); padding: clamp(72px,10vw,120px) clamp(20px,6vw,90px); }

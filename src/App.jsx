@@ -235,15 +235,16 @@ export default function App() {
           <p>Short clips from real sessions at Kotil Skin Science.</p>
         </div>
         <div className="vids__grid">
-          {VIDEOS.map((v) => (
-            <figure className="vcard" key={v.src}>
+          {VIDEOS.map((v, i) => (
+            /* --a..--e place each clip explicitly so the bento tiles a perfect
+               rectangle with no leftover cells (see .vcard--a..e in CSS) */
+            <figure className={`vcard vcard--${'abcde'[i] || 'e'}`} key={v.src}>
               <video
                 src={v.src}
                 poster={v.poster}
                 controls
                 preload="none"
                 playsInline
-                className={v.vertical ? 'is-vertical' : ''}
               />
               <figcaption>{v.title}</figcaption>
             </figure>
