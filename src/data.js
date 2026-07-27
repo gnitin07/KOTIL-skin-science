@@ -18,25 +18,18 @@ export const MACHINES = [
     img: '/assets/m2.webp',
   },
   {
-    id: 'contour',
-    name: 'Body Contour',
-    tag: 'Shape & Sculpt',
-    desc: 'Vacuum-assisted body shaping that targets stubborn fat pockets and smooths contours.',
-    img: '/assets/m3.webp',
-  },
-  {
     id: 'qswitch',
     name: 'Q-Switch Laser',
     tag: 'Pigment & Tattoo',
     desc: 'Precision Q-switched energy that shatters pigment, melasma and dark spots without harming skin.',
-    img: '/assets/m4.webp',
+    img: '/assets/m3.webp',
   },
   {
     id: 'led',
     name: 'LED Therapy',
     tag: 'Glow & Repair',
     desc: 'Medical-grade LED light that calms acne, speeds healing and rebuilds a natural, healthy glow.',
-    img: '/assets/m5.webp',
+    img: '/assets/m4.webp',
   },
 ]
 

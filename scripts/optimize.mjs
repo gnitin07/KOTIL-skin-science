@@ -13,9 +13,8 @@ await mkdir(OUT_DIR, { recursive: true })
 //   extra.trim  -> crop away empty transparent margins (cut-out PNGs)
 //   extra.alpha -> keep transparency (higher quality alpha channel)
 const JOBS = [
-  // trim: the cut-outs are generated with wide empty margins so nothing gets
-  // sliced at the frame edge — crop them back so each scene sits on the rig floor
-  ...['m1', 'm2', 'm3', 'm4', 'm5'].map((n) => [`${n}.png`, `${n}.webp`, { height: 1500 }, { trim: true, alpha: true }]),
+  // trim crops the transparent margin off each cut-out so it sits on the rig floor
+  ...['m1', 'm2', 'm3', 'm4'].map((n) => [`${n}.png`, `${n}.webp`, { height: 1500 }, { trim: true, alpha: true }]),
   ['team.png', 'team.webp', { width: 2000 }, { alpha: true }],
   // NB: the hero uses the BACKGROUND-REMOVED cut-out, not the original photo.
   // Pointing this at hero-treatment.png silently ships the grey studio backdrop.
