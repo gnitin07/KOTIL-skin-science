@@ -39,7 +39,7 @@ export const MACHINES = [
 ]
 
 export const TREATMENTS = [
-  { title: 'PRP Hair Regrowth', desc: 'Hair fall won’t stop? Doctor-led PRP to revive growth.', off: '20% Off', img: '/assets/t1.webp' },
+  { title: 'GFC Hair Regrowth', desc: 'Hair fall won’t stop? Doctor-led PRP to revive growth.', off: '20% Off', img: '/assets/t1.webp' },
   { title: 'Q-Switched Laser', desc: 'Stubborn dark spots? Clearer, even-toned skin.', off: '20% Off', img: '/assets/t2.webp' },
   { title: 'Laser Hair Reduction', desc: 'Tired of waxing? Painless, long-lasting smoothness.', off: '30% Off', img: '/assets/t3.webp' },
   { title: 'HIFU Skin Tightening', desc: 'Sagging & fine lines? Lift without surgery.', off: '30% Off', img: '/assets/t4.webp' },
