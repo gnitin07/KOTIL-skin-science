@@ -35,27 +35,36 @@ section { position: relative; }
   position: fixed; inset: 0 0 auto 0; z-index: 50;
   display: flex; align-items: center; justify-content: space-between;
   padding: 18px clamp(20px, 5vw, 64px);
-  /* solid by default now — the hero is a light banner carousel, not a dark image */
-  background: rgba(8, 16, 28, 0.94); backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(227,166,59,0.14);
-  transition: background .4s var(--ease), padding .4s var(--ease), backdrop-filter .4s;
+  /* transparent at the top so the banner flows up behind it (Devriz-style);
+     turns solid navy once you scroll off the hero (.scrolled) */
+  background: transparent; backdrop-filter: none;
+  border-bottom: 1px solid transparent;
+  transition: background .4s var(--ease), padding .4s var(--ease), backdrop-filter .4s, border-color .4s;
 }
 .nav.scrolled {
-  background: rgba(8, 16, 28, 0.72);
+  background: rgba(8, 16, 28, 0.92);
   backdrop-filter: blur(14px);
   padding-top: 12px; padding-bottom: 12px;
   border-bottom: 1px solid rgba(227,166,59,0.18);
 }
-.nav__logo { display: block; flex: 0 0 auto; }
+.nav__logo { position: relative; display: block; flex: 0 0 auto; }
 .nav__logo img {
   height: clamp(34px, 3.4vw, 48px); width: auto; display: block;
-  transition: height .4s var(--ease), opacity .25s;
+  transition: height .4s var(--ease), opacity .3s;
 }
+/* stack the two logo variants; cross-fade on scroll */
+.nav__logo-light { position: absolute; top: 0; left: 0; opacity: 0; pointer-events: none; }
+.nav.scrolled .nav__logo-dark { opacity: 0; }
+.nav.scrolled .nav__logo-light { opacity: 1; }
 .nav__logo:hover img { opacity: .85; }
+.nav.scrolled .nav__logo:hover .nav__logo-light { opacity: .85; }
 .nav.scrolled .nav__logo img { height: clamp(30px, 2.9vw, 40px); }
 .nav__links { display: flex; gap: 30px; font-size: 14px; font-weight: 500; letter-spacing: .3px; }
-.nav__links a { opacity: .8; transition: opacity .25s, color .25s; }
-.nav__links a:hover { opacity: 1; color: var(--gold-lite); }
+/* dark links over the light banner; light links once the nav is solid */
+.nav__links a { color: var(--navy); opacity: .82; transition: opacity .25s, color .25s; }
+.nav.scrolled .nav__links a { color: var(--cream); opacity: .8; }
+.nav__links a:hover { opacity: 1; color: var(--gold); }
+.nav.scrolled .nav__links a:hover { color: var(--gold-lite); }
 .nav__cta {
   background: var(--gold); color: var(--navy); font-weight: 600; font-size: 14px;
   padding: 11px 22px; border-radius: 100px; transition: transform .25s var(--ease), box-shadow .25s;
@@ -67,10 +76,13 @@ section { position: relative; }
 /* hamburger — hidden on desktop */
 .nav__burger {
   display: none; width: 42px; height: 42px; border: none; cursor: pointer; padding: 0;
-  border-radius: 12px; background: rgba(246,238,227,.08);
+  border-radius: 12px; background: rgba(13,27,42,.06);
   flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  transition: background .4s var(--ease);
 }
-.nav__burger span { display: block; width: 19px; height: 2px; background: var(--cream); border-radius: 2px; transition: transform .3s var(--ease), opacity .2s; }
+.nav.scrolled .nav__burger { background: rgba(246,238,227,.08); }
+.nav__burger span { display: block; width: 19px; height: 2px; background: var(--navy); border-radius: 2px; transition: transform .3s var(--ease), opacity .2s, background .4s; }
+.nav.scrolled .nav__burger span { background: var(--cream); }
 .nav__burger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav__burger.is-open span:nth-child(2) { opacity: 0; }
 .nav__burger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
@@ -91,21 +103,23 @@ section { position: relative; }
   }
   .nav__links.is-open { opacity: 1; visibility: visible; transform: translateY(0); }
   .nav__links a {
-    padding: 14px 4px; font-size: 16px; opacity: .9;
+    /* dropdown panel is dark, so links are always light here (regardless of scroll state) */
+    color: var(--cream); padding: 14px 4px; font-size: 16px; opacity: .9;
     border-bottom: 1px solid rgba(246,238,227,.08);
   }
+  .nav.scrolled .nav__links a { color: var(--cream); }
   .nav__links a:last-child { border-bottom: none; }
 }
 
 /* ---------- HERO BANNER CAROUSEL ---------- */
-/* Sits below the fixed nav (offset by --navh). Desktop shows the landscape
-   image, mobile the portrait one, via <picture> in the component. */
+/* Flows to the very top, behind the transparent fixed nav. Desktop shows the
+   landscape image, mobile the portrait one, via <picture> in the component. */
 .hbanner {
-  --navh: 90px; /* >= the solid nav's max height so it never overlaps the banner */
-  position: relative; width: 100%; margin-top: var(--navh);
-  /* 2:1 fits nav + banner into one screen on all common desktops. Export the
-     desktop banners at 2:1 (e.g. 1920x960) and `cover` fills with zero crop. */
-  aspect-ratio: 2 / 1; overflow: hidden; background: var(--navy); outline: none;
+  /* flows to the very top, behind the transparent fixed nav (Devriz-style) */
+  position: relative; width: 100%; margin-top: 0;
+  /* native 16:9 so the whole banner — headline, "30% Off", CTA — shows with
+     zero crop, full-bleed edge to edge (banners are exported at 1920x1080) */
+  aspect-ratio: 16 / 9; overflow: hidden; background: var(--navy); outline: none;
 }
 .hbanner__track { position: absolute; inset: 0; }
 .hbanner__slide {
@@ -146,7 +160,7 @@ section { position: relative; }
 
 @media (max-width: 768px) {
   /* portrait banner matches a 9:16 frame exactly — full-bleed, no fill needed */
-  .hbanner { --navh: 80px; height: auto; aspect-ratio: 9 / 16; }
+  .hbanner { height: auto; aspect-ratio: 9 / 16; margin-top: 0; }
   .hbanner__slide::before { display: none; }
   .hbanner__slide img { object-fit: cover; }
   .hbanner__arrow { display: none; }         /* swipe on touch */

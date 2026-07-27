@@ -63,7 +63,9 @@ export default function App() {
       {/* NAV */}
       <nav className="nav">
         <a className="nav__logo" href="#home" aria-label="Kotil Skin Science home">
-          <img src="/assets/kotil-logo-light.png" alt="Kotil Skin Science" />
+          {/* dark logo over the light banner (nav transparent); swaps to the light one when the nav goes solid on scroll */}
+          <img className="nav__logo-dark" src="/assets/kotil-logo.png" alt="Kotil Skin Science" />
+          <img className="nav__logo-light" src="/assets/kotil-logo-light.png" alt="" aria-hidden="true" />
         </a>
         <div className={`nav__links${menuOpen ? ' is-open' : ''}`} onClick={() => setMenuOpen(false)}>
           <a href="#treatments">Services</a><a href="#tech">Technology</a>
