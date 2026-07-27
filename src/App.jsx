@@ -299,7 +299,7 @@ export default function App() {
       {/* CTA — the booking prompt lands right after the social proof */}
       <section className="cta">
         <div className="kicker">Consultation First</div>
-        <h2><span>Book your</span> <span><em>glow-up.</em></span></h2>
+        <h2><span>Book your</span> <span><em>Transformation.</em></span></h2>
         <div className="cta__btns">
           <a className="btn-primary" href={telLink}>☏ Call Now</a>
           <a className="btn-ghost" href={enquireLink} target="_blank" rel="noopener noreferrer">✆ WhatsApp Appointment</a>
