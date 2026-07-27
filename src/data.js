@@ -124,6 +124,16 @@ export const REVIEWS = [
 
 export const REVIEW_RATING = { score: '4.5', count: 118, url: 'https://www.google.com/search?q=Kotil+Skin+Science+reviews' }
 
+// Hero banner slides. Each has a landscape (desktop) and portrait (mobile)
+// image; the carousel picks the right one per viewport. `href` is the click
+// target (the CTA baked into each banner). Optimise via `npm run assets:banners`.
+export const BANNERS = [
+  { id: 'monsoon', desktop: '/banners/1-monsoon-desktop.webp', mobile: '/banners/1-monsoon-mobile.webp', alt: 'Monsoon Special Offer — flat up to 30% off on all treatments', href: '#treatments' },
+  { id: 'lhr',     desktop: '/banners/2-lhr-desktop.webp',     mobile: '/banners/2-lhr-mobile.webp',     alt: 'Advanced Laser Hair Reduction with Soprano Titanium technology', href: '#treatments' },
+  { id: 'hydra',   desktop: '/banners/3-hydra-desktop.webp',   mobile: '/banners/3-hydra-mobile.webp',   alt: 'Advanced 17-in-1 Hydra Facial technology', href: '#treatments' },
+  { id: 'hifu',    desktop: '/banners/4-hifu-desktop.webp',    mobile: '/banners/4-hifu-mobile.webp',    alt: 'Non-surgical HIFU skin tightening and facial lift', href: '#treatments' },
+]
+
 // Before/after results. Populate by dropping the originals into
 // raw-assets/results/ and running `npm run assets:results`, which writes the
 // optimised files to public/results/. The section hides itself while empty.

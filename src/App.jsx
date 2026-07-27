@@ -3,6 +3,7 @@ import { useSiteAnimations } from './animations.js'
 import { MACHINES, TREATMENTS, STATS, REVIEWS, REVIEW_RATING, FAQS, GALLERY, ALL_TREATMENTS, RESULTS, VIDEOS } from './data.js'
 import { CLINIC, SOCIALS, telLink, mailLink, bookLink, enquireLink, directionsLink, mapEmbedSrc } from './config.js'
 import { GoogleG, SOCIAL_ICONS, STAT_ICONS } from './components/icons.jsx'
+import HeroBanner from './components/HeroBanner.jsx'
 
 export default function App() {
   const root = useRef(null)
@@ -80,29 +81,8 @@ export default function App() {
         </div>
       </nav>
 
-      {/* HERO — one horizontal wordmark sitting BEHIND the machines */}
-      <section className="hero" id="home">
-        <div className="hero__bg" /><div className="hero__grid" />
-
-        <h1 className="hero__wordmark">
-          <span className="mask"><span className="line">KOTIL SKIN SCIENCE</span></span>
-        </h1>
-
-        <div className="hero__inner">
-          <div className="hero__copy">
-            <span className="hero__tag">Delhi · Nirman Vihar</span>
-            <p>Real machines. Real experts. Doctor-led skin, hair &amp; body care. Diagnosis first, always.</p>
-            <div className="hero__btns">
-              <a className="btn-primary" href={telLink}>☏ Call Now</a>
-              <a className="btn-ghost" href="#tech">See our tech</a>
-            </div>
-          </div>
-          <div className="hero__media">
-            <img className="hero__team" src="/assets/hero-treatment.webp" alt="Kotil dermatologist performing a laser skin treatment on a patient" />
-          </div>
-        </div>
-        <div className="scroll-hint">Scroll</div>
-      </section>
+      {/* HERO — auto-playing promo banner carousel */}
+      <HeroBanner />
 
       {/* TRUST BADGES */}
       <section className="stats">

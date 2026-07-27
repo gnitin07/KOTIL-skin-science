@@ -34,7 +34,10 @@ section { position: relative; }
 .nav {
   position: fixed; inset: 0 0 auto 0; z-index: 50;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 20px clamp(20px, 5vw, 64px);
+  padding: 18px clamp(20px, 5vw, 64px);
+  /* solid by default now — the hero is a light banner carousel, not a dark image */
+  background: rgba(8, 16, 28, 0.94); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(227,166,59,0.14);
   transition: background .4s var(--ease), padding .4s var(--ease), backdrop-filter .4s;
 }
 .nav.scrolled {
@@ -92,6 +95,60 @@ section { position: relative; }
     border-bottom: 1px solid rgba(246,238,227,.08);
   }
   .nav__links a:last-child { border-bottom: none; }
+}
+
+/* ---------- HERO BANNER CAROUSEL ---------- */
+/* Sits below the fixed nav (offset by --navh). Desktop shows the landscape
+   image, mobile the portrait one, via <picture> in the component. */
+.hbanner {
+  --navh: 80px; /* matches the solid nav's height so it never overlaps the banner */
+  position: relative; width: 100%; margin-top: var(--navh);
+  aspect-ratio: 16 / 9; overflow: hidden; background: var(--navy);
+  outline: none;
+}
+.hbanner__track { position: absolute; inset: 0; }
+.hbanner__slide {
+  position: absolute; inset: 0; display: block;
+  opacity: 0; visibility: hidden;
+  transition: opacity .8s var(--ease), visibility .8s;
+}
+.hbanner__slide.is-active { opacity: 1; visibility: visible; }
+.hbanner__slide picture, .hbanner__slide img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+
+.hbanner__arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+  width: 46px; height: 46px; border-radius: 50%; border: none; cursor: pointer;
+  background: rgba(13,27,42,.42); color: #fff; font-size: 26px; line-height: 1;
+  display: grid; place-items: center; backdrop-filter: blur(4px);
+  opacity: 0; transition: opacity .3s, background .2s, transform .2s var(--ease);
+}
+.hbanner:hover .hbanner__arrow { opacity: 1; }
+.hbanner__arrow:hover { background: var(--gold); color: var(--navy); }
+.hbanner__arrow--prev { left: 16px; }
+.hbanner__arrow--next { right: 16px; }
+.hbanner__arrow--prev:hover { transform: translateY(-50%) scale(1.08); }
+.hbanner__arrow--next:hover { transform: translateY(-50%) scale(1.08); }
+
+.hbanner__dots {
+  position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 3;
+  display: flex; gap: 10px;
+}
+.hbanner__dot {
+  width: 9px; height: 9px; padding: 0; border: none; cursor: pointer; border-radius: 50%;
+  background: rgba(255,255,255,.55); box-shadow: 0 1px 4px rgba(0,0,0,.4);
+  transition: background .3s, width .3s, border-radius .3s;
+}
+.hbanner__dot.is-on { background: var(--gold); width: 26px; border-radius: 6px; }
+
+@media (max-width: 768px) {
+  .hbanner { --navh: 80px; aspect-ratio: 9 / 16; }
+  .hbanner__arrow { display: none; }         /* swipe on touch */
+  .hbanner__dots { bottom: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hbanner__slide { transition: opacity .01s; }
 }
 
 /* ---------- HERO ---------- */
