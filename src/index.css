@@ -1089,8 +1089,15 @@ section { position: relative; }
   .fwa__label { display: none; }               /* label crowds small screens */
   .fwa { bottom: 16px; right: 12px; }
   .fwa__fab { width: 50px; height: 50px; }
-  /* keep the pill clear of the WhatsApp fab: nudge left of centre */
-  .ai__pill { left: 12px; transform: none; }
+  /* phones: the pill collapses to just the sparkle disc (a 52px circle,
+     docked bottom-left so it clears the WhatsApp fab). font-size:0 removes
+     the text without extra markup; the icon keeps its own size. */
+  .ai__pill {
+    left: 12px; transform: none;
+    width: 52px; height: 52px; padding: 0; gap: 0; justify-content: center;
+    border-radius: 50%; font-size: 0;
+  }
+  .ai__pill-ico { width: 40px; height: 40px; }
   .ai__pill:hover { transform: translateY(-2px); }
   .ai__panel { left: 10px; transform: none; width: calc(100vw - 20px); bottom: 10px; height: min(560px, calc(100dvh - 70px)); }
 }
