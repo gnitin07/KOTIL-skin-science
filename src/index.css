@@ -56,12 +56,11 @@ section { position: relative; }
   :root { --topbar-h: 36px; }
   .topbar { justify-content: center; padding: 0 10px; gap: 6px; font-size: 12px; }
   .topbar__hours { display: none; }
+  /* the number is dropped on phones: the nav's Book Now already covers
+     reaching us, and the whole handset is a phone anyway */
+  .topbar__link--tel { display: none; }
   .topbar__actions { margin-left: 0; gap: 4px; }
   .topbar__link { padding: 5px 9px; }
-}
-@media (max-width: 380px) {
-  /* drop the wordy bits before anything wraps */
-  .topbar__mail { display: none; }
 }
 
 .nav {

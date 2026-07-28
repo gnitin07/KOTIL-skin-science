@@ -68,7 +68,7 @@ export default function App() {
         <div className="topbar">
           <p className="topbar__hours"><span aria-hidden="true">🕘</span> {hoursLine}</p>
           <div className="topbar__actions">
-            <a className="topbar__link" href={telLink} aria-label={`Call ${CLINIC.phoneDisplay}`}>
+            <a className="topbar__link topbar__link--tel" href={telLink} aria-label={`Call ${CLINIC.phoneDisplay}`}>
               <span aria-hidden="true">☏</span> <span className="topbar__num">{CLINIC.phoneDisplay}</span>
             </a>
             <a className="topbar__link topbar__link--wa" href={enquireLink} target="_blank" rel="noopener noreferrer">
@@ -91,7 +91,7 @@ export default function App() {
           <a href="#reviews">Reviews</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
         </div>
         <div className="nav__right">
-          <a className="nav__cta" href={telLink}>Call Now</a>
+          <a className="nav__cta" href={enquireLink} target="_blank" rel="noopener noreferrer">Book Now</a>
           <button
             className={`nav__burger${menuOpen ? ' is-open' : ''}`}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
