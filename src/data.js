@@ -1,34 +1,63 @@
 import { bookLink } from './config.js'
 
-// Machines used at the clinic. Each shot is a treatment IN PROGRESS — expert,
-// patient and device together — not a vendor-style photo of the device alone.
+// The clinic's 4 machines, transcribed from the clinic's own spec sheet.
+// Each entry: what it is (desc), what it treats (points), the one-line USP the
+// clinic leads with, and the certification/claim badges worth showing.
 export const MACHINES = [
   {
-    id: 'hifu',
-    name: 'HIFU Lift',
-    tag: 'Skin Tightening',
-    desc: 'Focused ultrasound that lifts and tightens sagging skin and jawline. No surgery, no downtime.',
-    img: '/assets/m1.webp',
-  },
-  {
-    id: 'diode',
-    name: 'Diode Laser',
-    tag: 'Hair Reduction',
-    desc: 'Triple-wavelength diode platform for near-painless, long-lasting hair reduction on every skin type.',
+    id: 'soprano',
+    name: 'Soprano Titanium',
+    tag: 'Laser Hair Reduction',
+    desc: 'Triple-wavelength diode laser (755, 810 & 1064 nm) by Alma Lasers, Israel, with SHR In-Motion + ICE Plus cooling.',
+    points: [
+      '80–90% average hair reduction',
+      'Safe for all skin types (I–VI)',
+      'Painless, with minimal downtime',
+    ],
+    usp: 'Faster, virtually painless and safe for all skin types.',
+    badges: ['US FDA Approved', 'CE Certified', 'Gold standard in LHR'],
     img: '/assets/m2.webp',
   },
   {
-    id: 'qswitch',
-    name: 'Q-Switch Laser',
-    tag: 'Pigment & Tattoo',
-    desc: 'Precision Q-switched energy that shatters pigment, melasma and dark spots without harming skin.',
+    id: 'pico',
+    name: 'Diode Pico',
+    tag: 'Pigmentation · Tattoo · Rejuvenation',
+    desc: 'Picosecond laser (1064 / 532 nm dual wavelength) firing ultra-short pulses — a trillionth of a second each.',
+    points: [
+      'Pigmentation, melasma & acne scars',
+      'Tattoo removal & skin brightening',
+      'Minimal downtime, maximum results',
+    ],
+    usp: 'Breaks pigment into tiny particles without damaging surrounding skin.',
+    badges: ['Advanced Pico Technology', 'Safe for Indian skin'],
     img: '/assets/m3.webp',
   },
   {
-    id: 'led',
-    name: 'LED Therapy',
-    tag: 'Glow & Repair',
-    desc: 'Medical-grade LED light that calms acne, speeds healing and rebuilds a natural, healthy glow.',
+    id: 'hifu',
+    name: 'HIFU',
+    tag: 'Body Contouring & Tightening',
+    desc: 'High-Intensity Focused Ultrasound that reaches deep into the SMAS layer — the same layer targeted in surgery.',
+    points: [
+      'Fat reduction & inch loss',
+      'Body contouring & skin tightening',
+      'Visible inch loss in a single session',
+    ],
+    usp: 'Non-invasive, no downtime, no surgery — safe and effective.',
+    badges: ['Clinically proven', 'Safe & painless'],
+    img: '/assets/m1.webp',
+  },
+  {
+    id: 'hydra',
+    name: 'Hydra Facial',
+    tag: '17-in-1 Skin Rejuvenation',
+    desc: 'Hydro-dermabrasion, Vertex technology, RF, ultrasound, LED and oxygen infusion — 17 technologies in one machine.',
+    points: [
+      'Deep cleansing, exfoliation & extraction',
+      'Hydration, oxygenation & brightening',
+      'Instantly glowing, refreshed skin',
+    ],
+    usp: 'All in one platform for complete skin care solutions.',
+    badges: ['17 advanced technologies', 'Suits all skin types'],
     img: '/assets/m4.webp',
   },
 ]

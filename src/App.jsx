@@ -1,10 +1,11 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { useSiteAnimations } from './animations.js'
-import { MACHINES, TREATMENTS, STATS, REVIEWS, REVIEW_RATING, FAQS, GALLERY, ALL_TREATMENTS, RESULTS, VIDEOS, COMPARISONS } from './data.js'
+import { TREATMENTS, STATS, REVIEWS, REVIEW_RATING, FAQS, GALLERY, ALL_TREATMENTS, RESULTS, VIDEOS, COMPARISONS } from './data.js'
 import { CLINIC, SOCIALS, telLink, mailLink, bookLink, enquireLink, directionsLink, mapEmbedSrc, hoursLine } from './config.js'
 import { GoogleG, SOCIAL_ICONS, STAT_ICONS } from './components/icons.jsx'
 import HeroBanner from './components/HeroBanner.jsx'
 import BeforeAfter from './components/BeforeAfter.jsx'
+import TechSlider from './components/TechSlider.jsx'
 
 export default function App() {
   const root = useRef(null)
@@ -185,40 +186,8 @@ export default function App() {
         </div>
       </section>
 
-      {/* MACHINE RIG — switches as you scroll */}
-      <section className="rig" id="tech">
-        <div className="rig__inner">
-          <div className="rig__head">
-            <span className="kicker">Our Technology</span>
-            <h2>The machines behind the results</h2>
-          </div>
-
-          <div className="rig__stage">
-            <div className="rig__halo" />
-            {MACHINES.map((m) => (
-              <img className="rig__machine" key={m.id} src={m.img} alt={`${m.name}, ${m.tag}`} />
-            ))}
-            <div className="rig__shadow" />
-          </div>
-
-          <div className="rig__copy">
-            {MACHINES.map((m, i) => (
-              <div className="rig__slide" key={m.id}>
-                <span className="rig__num">{String(i + 1).padStart(2, '0')} / {String(MACHINES.length).padStart(2, '0')}</span>
-                <span className="rig__tag">{m.tag}</span>
-                <h3>{m.name}</h3>
-                <p>{m.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="rig__dots" role="tablist" aria-label="Choose a machine">
-            {MACHINES.map((m) => (
-              <button className="rig__dot" key={m.id} role="tab" aria-label={m.name} />
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* TECHNOLOGY — compact slider, copy left / machine right */}
+      <TechSlider />
 
       {/* MARQUEE */}
       <section className="marquee">
