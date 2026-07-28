@@ -61,7 +61,24 @@ export default function App() {
 
   return (
     <div ref={root}>
-      {/* NAV */}
+      {/* HEADER = utility strip + nav, fixed together. The strip is solid, so
+          the banner is pushed down by its height (--topbar-h); the nav itself
+          still floats transparently over the top of the banner. */}
+      <header className="header">
+        <div className="topbar">
+          <p className="topbar__hours"><span aria-hidden="true">🕘</span> {hoursLine}</p>
+          <div className="topbar__actions">
+            <a className="topbar__link" href={telLink} aria-label={`Call ${CLINIC.phoneDisplay}`}>
+              <span aria-hidden="true">☏</span> <span className="topbar__num">{CLINIC.phoneDisplay}</span>
+            </a>
+            <a className="topbar__link topbar__link--wa" href={enquireLink} target="_blank" rel="noopener noreferrer">
+              <span aria-hidden="true">✆</span> WhatsApp
+            </a>
+            <a className="topbar__link" href={mailLink} aria-label={`Email ${CLINIC.email}`}>
+              <span aria-hidden="true">✉</span> <span className="topbar__mail">Email</span>
+            </a>
+          </div>
+        </div>
       <nav className="nav">
         <a className="nav__logo" href="#home" aria-label="Kotil Skin Science home">
           {/* dark logo over the light banner (nav transparent); swaps to the light one when the nav goes solid on scroll */}
@@ -83,6 +100,7 @@ export default function App() {
           ><span /><span /><span /></button>
         </div>
       </nav>
+      </header>
 
       {/* HERO — auto-playing promo banner carousel */}
       <HeroBanner />
