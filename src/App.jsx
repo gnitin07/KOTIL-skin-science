@@ -6,6 +6,8 @@ import { GoogleG, SOCIAL_ICONS, STAT_ICONS } from './components/icons.jsx'
 import HeroBanner from './components/HeroBanner.jsx'
 import BeforeAfter from './components/BeforeAfter.jsx'
 import TechSlider from './components/TechSlider.jsx'
+import FloatingWhatsApp from './components/FloatingWhatsApp.jsx'
+import Assistant from './components/Assistant.jsx'
 
 export default function App() {
   const root = useRef(null)
@@ -462,6 +464,10 @@ export default function App() {
           <button className="lb__nav lb__nav--next" aria-label="Next photo" onClick={(e) => { e.stopPropagation(); stepLb(1) }}>›</button>
         </div>
       )}
+
+      {/* FLOATING CONTACT — WhatsApp launcher (right) + Kotil Assist (centre) */}
+      <FloatingWhatsApp />
+      <Assistant />
     </div>
   )
 }
