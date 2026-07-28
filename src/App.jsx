@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { useSiteAnimations } from './animations.js'
 import { MACHINES, TREATMENTS, STATS, REVIEWS, REVIEW_RATING, FAQS, GALLERY, ALL_TREATMENTS, RESULTS, VIDEOS, COMPARISONS } from './data.js'
-import { CLINIC, SOCIALS, telLink, mailLink, bookLink, enquireLink, directionsLink, mapEmbedSrc } from './config.js'
+import { CLINIC, SOCIALS, telLink, mailLink, bookLink, enquireLink, directionsLink, mapEmbedSrc, hoursLine } from './config.js'
 import { GoogleG, SOCIAL_ICONS, STAT_ICONS } from './components/icons.jsx'
 import HeroBanner from './components/HeroBanner.jsx'
 import BeforeAfter from './components/BeforeAfter.jsx'
@@ -309,6 +309,7 @@ export default function App() {
               <a className="btn-primary" href={telLink}>☏ Call Now</a>
               <a className="btn-ghost" href={enquireLink} target="_blank" rel="noopener noreferrer">✆ WhatsApp Appointment</a>
             </div>
+            <p className="cta__hours"><span aria-hidden="true">🕘</span> {hoursLine}</p>
           </div>
           <div className="cta__compare">
             {COMPARISONS.map((c) => (

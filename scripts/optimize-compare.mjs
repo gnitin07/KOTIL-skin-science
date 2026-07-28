@@ -22,11 +22,16 @@ mkdirSync(OUT, { recursive: true })
 // slider draws its own labels, and the burned-in ones would sit there no
 // matter where the handle is. Trimming that strip is the only way to remove
 // them without repainting over the photo.
+// Every pair shares ONE output box. Different box sizes gave the two sliders
+// different heights, so they sat ragged side by side and their captions never
+// lined up. Same box => same rendered height => aligned row.
+const BOX = { width: 900, height: 700 }
+
 // The burned-in label box measures y 620..671 in both stretch-mark sources
 // (~703px tall), so anything under 0.131 leaves its top edge showing.
 const PAIRS = [
-  { slug: 'stretchmarks', width: 900, height: 676, cropBottom: 0.14 },
-  { slug: 'hair', width: 900, height: 779, cropBottom: 0 },
+  { slug: 'stretchmarks', ...BOX, cropBottom: 0.14 },
+  { slug: 'hair', ...BOX, cropBottom: 0 },
 ]
 
 const kb = (b) => (b / 1024).toFixed(0) + 'KB'

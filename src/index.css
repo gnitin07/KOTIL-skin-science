@@ -455,12 +455,16 @@ section { position: relative; }
 .cta { min-height: 86vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 20px;
   background: radial-gradient(90% 90% at 50% 0%, rgba(227,166,59,.16), transparent 60%), var(--navy); }
 .cta .kicker { color: var(--gold-lite); letter-spacing: 4px; font-size: 13px; text-transform: uppercase; margin-bottom: 18px; }
-/* Sized to sit beside the comparison sliders rather than fill the section.
-   The 32px floor keeps the long word "Transformation." inside a 320px phone. */
-.cta h2 { font-size: clamp(32px,5vw,66px); color: var(--white); line-height: 1.02; }
+/* "Transformation." is one unbreakable 15-character word, so the cap is set by
+   how wide it renders, not by taste: at 66px it measured 554px inside a 472px
+   column and spilled over the first slider. 54px keeps it inside the widened
+   column at every breakpoint; the 30px floor keeps it inside a 320px phone. */
+.cta h2 { font-size: clamp(30px,3.4vw,54px); color: var(--white); line-height: 1.03; }
 .cta__inner {
   width: 100%; max-width: 1240px; margin: 0 auto;
-  display: grid; grid-template-columns: minmax(280px, 0.8fr) 1.2fr;
+  /* 1fr 1.3fr — copy still clears the long word (453px into 511px) and the
+     sliders get the extra room, since they're the proof doing the selling */
+  display: grid; grid-template-columns: 1fr 1.3fr;
   gap: clamp(32px,4vw,64px); align-items: center; text-align: left;
 }
 .cta__copy .kicker { margin-bottom: 14px; }
@@ -468,6 +472,10 @@ section { position: relative; }
 /* .cta__btns centres by default (it used to sit under a centred headline);
    in this side-by-side layout it belongs at the start of the copy column */
 .cta__copy .cta__btns { justify-content: flex-start; margin-top: 30px; }
+.cta__hours {
+  display: flex; align-items: center; gap: 8px; margin-top: 18px;
+  font-size: 13.5px; font-weight: 400; letter-spacing: .2px; color: var(--cream); opacity: .62;
+}
 .cta__compare { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(14px,1.8vw,22px); }
 
 /* ---------- BEFORE / AFTER SLIDER ---------- */
@@ -524,6 +532,7 @@ section { position: relative; }
   .cta__inner { grid-template-columns: 1fr; text-align: center; }
   .cta__sub { margin-left: auto; margin-right: auto; }
   .cta__copy .cta__btns { justify-content: center; }
+  .cta__hours { justify-content: center; }
 }
 @media (max-width: 560px) {
   /* one slider per row so each stays big enough to actually drag */

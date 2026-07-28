@@ -156,7 +156,7 @@ export const COMPARISONS = [
     alt: 'Abdomen treated for stretch marks',
     before: '/compare/stretchmarks-before.webp',
     after: '/compare/stretchmarks-after.webp',
-    width: 900, height: 676,
+    width: 900, height: 700,
   },
   {
     id: 'hair',
@@ -164,7 +164,7 @@ export const COMPARISONS = [
     alt: 'Scalp treated for hair thinning',
     before: '/compare/hair-before.webp',
     after: '/compare/hair-after.webp',
-    width: 900, height: 779,
+    width: 900, height: 700,
   },
 ]
 

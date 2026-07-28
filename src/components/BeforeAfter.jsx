@@ -25,8 +25,11 @@ export default function BeforeAfter({ before, after, alt, label, width, height }
 
   const onPointerDown = (e) => {
     dragging.current = true
-    e.currentTarget.setPointerCapture?.(e.pointerId)
+    // Move first, capture second. setPointerCapture throws if the browser has
+    // no active pointer for that id, and when it ran first that exception
+    // aborted the handler, so a tap never repositioned the handle at all.
     setFromX(e.clientX)
+    try { e.currentTarget.setPointerCapture?.(e.pointerId) } catch { /* capture is an enhancement, not a requirement */ }
   }
   const onPointerMove = (e) => { if (dragging.current) setFromX(e.clientX) }
   const stop = (e) => {

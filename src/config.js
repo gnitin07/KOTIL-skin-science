@@ -11,6 +11,7 @@ export const CLINIC = {
   phone: '919871054183',
   phoneDisplay: '+91 98710 54183',
   email: 'info@kotilskinscience.com',
+  hours: { open: '9 AM', close: '8 PM', closedDay: 'Tuesday' },
   address: {
     line1: 'Plot No-8, Shankar Vihar, Preet Vihar',
     line2: 'New Delhi, Delhi 110092',
@@ -47,6 +48,11 @@ export const bookLink = (treatment) =>
 export const enquireLink = waLink(
   `Hi ${CLINIC.name}, I'd like to book an appointment.`
 )
+
+/** "Open 9 AM – 8 PM · Closed Tuesday" — one string, so hours never drift
+ *  between the places that show them. */
+export const hoursLine =
+  `Open ${CLINIC.hours.open} – ${CLINIC.hours.close} · Closed ${CLINIC.hours.closedDay}s`
 
 const mapQuery = encodeURIComponent(CLINIC.address.query)
 export const directionsLink = `https://www.google.com/maps/search/${mapQuery}`
