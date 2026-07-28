@@ -14,7 +14,8 @@
     "assets:favicon": "node scripts/favicon.mjs",
     "assets:videos": "node scripts/optimize-videos.mjs",
     "assets:results": "node scripts/optimize-results.mjs",
-    "assets:banners": "node scripts/optimize-banners.mjs"
+    "assets:banners": "node scripts/optimize-banners.mjs",
+    "assets:compare": "node scripts/optimize-compare.mjs"
   },
   "engines": {
     "node": ">=18"

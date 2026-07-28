@@ -1,9 +1,10 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { useSiteAnimations } from './animations.js'
-import { MACHINES, TREATMENTS, STATS, REVIEWS, REVIEW_RATING, FAQS, GALLERY, ALL_TREATMENTS, RESULTS, VIDEOS } from './data.js'
+import { MACHINES, TREATMENTS, STATS, REVIEWS, REVIEW_RATING, FAQS, GALLERY, ALL_TREATMENTS, RESULTS, VIDEOS, COMPARISONS } from './data.js'
 import { CLINIC, SOCIALS, telLink, mailLink, bookLink, enquireLink, directionsLink, mapEmbedSrc } from './config.js'
 import { GoogleG, SOCIAL_ICONS, STAT_ICONS } from './components/icons.jsx'
 import HeroBanner from './components/HeroBanner.jsx'
+import BeforeAfter from './components/BeforeAfter.jsx'
 
 export default function App() {
   const root = useRef(null)
@@ -296,13 +297,24 @@ export default function App() {
         </div>
       </section>
 
-      {/* CTA — the booking prompt lands right after the social proof */}
+      {/* CTA — the booking prompt lands right after the social proof, with the
+          before/after sliders beside it as the proof that earns the click */}
       <section className="cta">
-        <div className="kicker">Consultation First</div>
-        <h2><span>Book your</span> <span><em>Transformation.</em></span></h2>
-        <div className="cta__btns">
-          <a className="btn-primary" href={telLink}>☏ Call Now</a>
-          <a className="btn-ghost" href={enquireLink} target="_blank" rel="noopener noreferrer">✆ WhatsApp Appointment</a>
+        <div className="cta__inner">
+          <div className="cta__copy">
+            <div className="kicker">Consultation First</div>
+            <h2><span>Book your</span> <span><em>Transformation.</em></span></h2>
+            <p className="cta__sub">Drag the sliders to see real results from our Preet Vihar clinic.</p>
+            <div className="cta__btns">
+              <a className="btn-primary" href={telLink}>☏ Call Now</a>
+              <a className="btn-ghost" href={enquireLink} target="_blank" rel="noopener noreferrer">✆ WhatsApp Appointment</a>
+            </div>
+          </div>
+          <div className="cta__compare">
+            {COMPARISONS.map((c) => (
+              <BeforeAfter key={c.id} {...c} />
+            ))}
+          </div>
         </div>
       </section>
 
