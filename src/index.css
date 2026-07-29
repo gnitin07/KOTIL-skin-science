@@ -1137,6 +1137,15 @@ section { position: relative; }
 
   /* buttons small enough that every pair sits on ONE row */
   .btn-primary, .btn-ghost { padding: 11px 18px; font-size: 14px; }
+
+  /* the reviews and map pairs are WIDE labels: intrinsic widths fit a 375px
+     screen but wrap on 360px devices. A 50/50 grid makes stacking impossible
+     regardless of device width; the buttons shrink to their cell instead. */
+  .reviews__cta, .visit__btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .reviews__cta a, .visit__btns a {
+    display: inline-flex; align-items: center; justify-content: center; text-align: center;
+    padding-left: 8px; padding-right: 8px; white-space: nowrap; font-size: 13.5px; min-width: 0;
+  }
 }
 @media (max-width: 430px) {
   /* trim label tails ("on Google", "Appointment") so pairs still fit */
