@@ -191,14 +191,15 @@ export default function App() {
       {/* TECHNOLOGY — compact slider, copy left / machine right */}
       <TechSlider />
 
-      {/* MARQUEE */}
-      <section className="marquee">
+      {/* MARQUEE — slim sale ticker; the whole strip clicks through to treatments */}
+      <a className="marquee" href="#treatments" aria-label="Monsoon sale live: flat up to 30% off on all treatments — see treatments">
         <div className="marquee__row">
+          {/* two identical halves: the loop animates xPercent -50, so the seam is invisible */}
           {Array.from({ length: 2 }).map((_, r) => (
-            <span key={r}>Glowing Skin <i /> Healthy Hair <i /> Radiant You <i /> Doctor Led <i />&nbsp;</span>
+            <span key={r}>Monsoon Sale Live <i /> Flat Upto 30% Off On All Treatments <i /> Book Today <i />&nbsp;</span>
           ))}
         </div>
-      </section>
+      </a>
 
       {/* CLINIC GALLERY (bento) */}
       <section className="gallery" id="gallery">
