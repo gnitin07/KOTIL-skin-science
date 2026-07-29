@@ -77,8 +77,8 @@ export default function App() {
             <a className="topbar__link topbar__link--wa" href={enquireLink} target="_blank" rel="noopener noreferrer">
               <span aria-hidden="true">✆</span> WhatsApp
             </a>
-            <a className="topbar__link" href={mailLink} aria-label={`Email ${CLINIC.email}`}>
-              <span aria-hidden="true">✉</span> <span className="topbar__mail">Email</span>
+            <a className="topbar__link topbar__link--mail" href={mailLink} aria-label={`Email ${CLINIC.email}`}>
+              <span className="topbar__ico" aria-hidden="true">✉</span> <span className="topbar__mail">Mail</span>
             </a>
           </div>
         </div>
