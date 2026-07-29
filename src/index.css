@@ -312,11 +312,11 @@ section { position: relative; }
     radial-gradient(70% 60% at 78% 40%, rgba(227,166,59,0.12), transparent 60%),
     var(--navy);
   color: var(--cream); outline: none;
-  padding: clamp(56px,7vw,88px) clamp(20px,6vw,90px) clamp(30px,4vw,44px);
+  padding: clamp(48px,5.5vw,68px) clamp(20px,6vw,90px) clamp(26px,3vw,36px);
 }
-.tech__head { text-align: center; max-width: 720px; margin: 0 auto 34px; }
+.tech__head { text-align: center; max-width: 940px; margin: 0 auto 24px; }
 .tech__head .kicker { color: var(--gold); font-weight: 600; letter-spacing: 3px; font-size: 13px; text-transform: uppercase; }
-.tech__head h2 { font-weight: 800; letter-spacing: -0.02em; font-size: clamp(30px,4.6vw,54px); color: var(--white); margin-top: 8px; }
+.tech__head h2 { font-weight: 800; letter-spacing: -0.02em; font-size: clamp(28px,3vw,42px); color: var(--white); margin-top: 8px; }
 
 /* Slides stack in ONE grid cell, so the block is exactly as tall as its
    tallest slide — no reserved vh, no dead space, no height jumps. */
@@ -405,9 +405,9 @@ section { position: relative; }
 
 /* ---------- TREATMENTS (horizontal pin) ---------- */
 .treat { background: var(--cream); color: var(--navy); }
-.treat__head { text-align: center; padding: clamp(70px,10vw,120px) 20px 10px; }
+.treat__head { text-align: center; padding: clamp(52px,6vw,76px) 20px 10px; }
 .treat__head .kicker { color: var(--gold); font-weight: 600; letter-spacing: 3px; font-size: 13px; text-transform: uppercase; }
-.treat__head h2 { font-size: clamp(38px, 6vw, 84px); margin-top: 10px; color: var(--navy); }
+.treat__head h2 { font-size: clamp(30px, 3.4vw, 46px); margin-top: 10px; color: var(--navy); }
 .treat__hint {
   display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
   font-size: 13.5px; font-weight: 500; letter-spacing: .4px;
@@ -467,12 +467,12 @@ section { position: relative; }
 /* ---------- TRUST BADGES ---------- */
 /* Contained cards on their own light band. Previously these were bare numbers
    sitting straight on the navy, which read as floating and unaligned. */
-.stats { background: var(--cream); padding: clamp(52px,7vw,84px) clamp(20px,6vw,90px); }
-.stats__head { text-align: center; max-width: 780px; margin: 0 auto clamp(30px,4vw,46px); }
+.stats { background: var(--cream); padding: clamp(48px,5.5vw,68px) clamp(20px,6vw,90px); }
+.stats__head { text-align: center; max-width: 940px; margin: 0 auto clamp(22px,3vw,32px); }
 .stats__head .kicker { color: var(--gold); font-weight: 600; letter-spacing: 3px; font-size: 13px; text-transform: uppercase; }
 .stats__head h2 {
   font-weight: 800; letter-spacing: -0.02em; line-height: 1.12; margin-top: 10px;
-  font-size: clamp(28px,3.9vw,48px); color: var(--navy);
+  font-size: clamp(26px,2.5vw,36px); color: var(--navy);
 }
 .stats__grid {
   max-width: 1160px; margin: 0 auto;
@@ -508,7 +508,7 @@ section { position: relative; }
 @media (max-width: 620px) { .stats { grid-template-columns: repeat(2, 1fr); } }
 
 /* ---------- CTA / FOOTER ---------- */
-.cta { min-height: 86vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 20px;
+.cta { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: clamp(60px,6.5vw,84px) 20px;
   background: radial-gradient(90% 90% at 50% 0%, rgba(227,166,59,.16), transparent 60%), var(--navy); }
 .cta .kicker { color: var(--gold-lite); letter-spacing: 4px; font-size: 13px; text-transform: uppercase; margin-bottom: 18px; }
 /* "Transformation." is one unbreakable 15-character word, so the cap is set by
@@ -603,7 +603,7 @@ section { position: relative; }
 /* ---------- FOOTER ---------- */
 .footer { background: #0a1520; color: var(--cream); border-top: 1px solid rgba(227,166,59,.18); }
 .footer__main {
-  max-width: 1240px; margin: 0 auto; padding: clamp(56px,8vw,88px) clamp(20px,6vw,90px) 40px;
+  max-width: 1240px; margin: 0 auto; padding: clamp(48px,5.5vw,68px) clamp(20px,6vw,90px) 36px;
   display: grid; grid-template-columns: 1.6fr 1fr 1.2fr; gap: clamp(32px,5vw,72px);
 }
 .footer__brand img { height: 46px; width: auto; margin-bottom: 20px; }
@@ -644,10 +644,10 @@ section { position: relative; }
 .reveal-line { overflow: hidden; }
 
 /* ---------- REVIEWS ---------- */
-.reviews { background: var(--cream); color: var(--navy); padding: clamp(72px,10vw,120px) clamp(20px,6vw,90px); }
-.reviews__head { text-align: center; max-width: 720px; margin: 0 auto; }
+.reviews { background: var(--cream); color: var(--navy); padding: clamp(52px,6vw,76px) clamp(20px,6vw,90px); }
+.reviews__head { text-align: center; max-width: 940px; margin: 0 auto; }
 .reviews__head .kicker { color: var(--gold); font-weight: 600; letter-spacing: 3px; font-size: 13px; text-transform: uppercase; }
-.reviews__head h2 { font-family: var(--font); font-weight: 800; letter-spacing: -0.02em; font-size: clamp(34px,5.4vw,66px); color: var(--navy); margin-top: 10px; }
+.reviews__head h2 { font-family: var(--font); font-weight: 800; letter-spacing: -0.02em; font-size: clamp(28px,3vw,42px); color: var(--navy); margin-top: 10px; }
 .reviews__rating { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; flex-wrap: wrap; justify-content: center; }
 .reviews__score { font-family: var(--font); font-weight: 800; letter-spacing: -0.02em; font-size: 30px; color: var(--navy); }
 .reviews__stars { color: #f5b301; letter-spacing: 2px; font-size: 20px; }
@@ -655,7 +655,7 @@ section { position: relative; }
 .reviews__gword { font-weight: 600; font-size: 16px; color: var(--navy); }
 
 /* slidable single row */
-.reviews__wrap { position: relative; max-width: 1240px; margin: 44px auto 0; }
+.reviews__wrap { position: relative; max-width: 1240px; margin: 30px auto 0; }
 .reviews__track {
   display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x proximity;
   padding: 6px 4px 14px; scroll-behavior: smooth; scrollbar-width: thin;
@@ -790,10 +790,10 @@ section { position: relative; }
 .allt__foot .btn-primary, .allt__foot .btn-ghost { padding: 12px 26px; font-size: 15px; }
 
 /* ---------- OUR RESULTS (before / after) ---------- */
-.results { background: var(--navy); padding: clamp(72px,10vw,120px) clamp(20px,6vw,90px); }
-.results__head { text-align: center; max-width: 720px; margin: 0 auto 44px; }
+.results { background: var(--navy); padding: clamp(52px,6vw,76px) clamp(20px,6vw,90px); }
+.results__head { text-align: center; max-width: 940px; margin: 0 auto 30px; }
 .results__head .kicker { color: var(--gold); font-weight: 600; letter-spacing: 3px; font-size: 13px; text-transform: uppercase; }
-.results__head h2 { font-weight: 800; letter-spacing: -0.02em; font-size: clamp(32px,5vw,60px); color: var(--white); margin: 10px 0; }
+.results__head h2 { font-weight: 800; letter-spacing: -0.02em; font-size: clamp(28px,3vw,42px); color: var(--white); margin: 10px 0; }
 .results__head p { opacity: .7; font-weight: 300; font-size: clamp(14px,1.5vw,17px); }
 .results__grid {
   max-width: 1240px; margin: 0 auto;
@@ -815,10 +815,10 @@ section { position: relative; }
 .results__note { text-align: center; margin-top: 30px; font-size: 13px; opacity: .5; font-weight: 300; }
 
 /* ---------- VIDEO GALLERY ---------- */
-.vids { background: var(--cream); color: var(--navy); padding: clamp(72px,10vw,120px) clamp(20px,6vw,90px); }
-.vids__head { text-align: center; max-width: 720px; margin: 0 auto 44px; }
+.vids { background: var(--cream); color: var(--navy); padding: clamp(52px,6vw,76px) clamp(20px,6vw,90px); }
+.vids__head { text-align: center; max-width: 940px; margin: 0 auto 30px; }
 .vids__head .kicker { color: var(--gold); font-weight: 600; letter-spacing: 3px; font-size: 13px; text-transform: uppercase; }
-.vids__head h2 { font-weight: 800; letter-spacing: -0.02em; font-size: clamp(32px,5vw,60px); color: var(--navy); margin: 10px 0; }
+.vids__head h2 { font-weight: 800; letter-spacing: -0.02em; font-size: clamp(28px,3vw,42px); color: var(--navy); margin: 10px 0; }
 .vids__head p { opacity: .65; font-weight: 300; font-size: clamp(14px,1.5vw,17px); }
 /* Bento — one feature clip + four, tiling a perfect rectangle with zero gaps.
    The container's aspect-ratio drives the row height, so every tile stays
@@ -865,10 +865,10 @@ section { position: relative; }
 }
 
 /* ---------- CLINIC GALLERY (bento) ---------- */
-.gallery { background: var(--navy); padding: clamp(72px,10vw,120px) clamp(20px,6vw,90px); }
-.gallery__head { text-align: center; max-width: 720px; margin: 0 auto 44px; }
+.gallery { background: var(--navy); padding: clamp(52px,6vw,76px) clamp(20px,6vw,90px); }
+.gallery__head { text-align: center; max-width: 940px; margin: 0 auto 30px; }
 .gallery__head .kicker { color: var(--gold); font-weight: 600; letter-spacing: 3px; font-size: 13px; text-transform: uppercase; }
-.gallery__head h2 { font-family: var(--font); font-weight: 800; letter-spacing: -0.02em; font-size: clamp(34px,5.4vw,66px); color: var(--white); margin: 10px 0; }
+.gallery__head h2 { font-family: var(--font); font-weight: 800; letter-spacing: -0.02em; font-size: clamp(28px,3vw,42px); color: var(--white); margin: 10px 0; }
 .gallery__head p { opacity: .7; font-weight: 300; font-size: clamp(14px,1.5vw,17px); }
 .gallery__grid {
   max-width: 1240px; margin: 0 auto;
@@ -938,16 +938,16 @@ section { position: relative; }
 }
 
 /* ---------- FAQ ---------- */
-.faq { background: var(--navy); padding: clamp(72px,10vw,120px) clamp(20px,6vw,90px); }
-.faq__head { text-align: center; max-width: 720px; margin: 0 auto; }
+.faq { background: var(--navy); padding: clamp(52px,6vw,76px) clamp(20px,6vw,90px); }
+.faq__head { text-align: center; max-width: 940px; margin: 0 auto; }
 .faq__head .kicker { color: var(--gold); font-weight: 600; letter-spacing: 3px; font-size: 13px; text-transform: uppercase; }
-.faq__head h2 { font-family: var(--font); font-weight: 800; letter-spacing: -0.02em; font-size: clamp(34px,5.4vw,66px); color: var(--white); margin: 10px 0; }
+.faq__head h2 { font-family: var(--font); font-weight: 800; letter-spacing: -0.02em; font-size: clamp(28px,3vw,42px); color: var(--white); margin: 10px 0; }
 .faq__head p { opacity: .7; font-weight: 300; font-size: clamp(14px,1.5vw,17px); }
 /* 2 columns: the 8 questions tile 4 exact rows with no leftover cell (3 columns
    left a hole). align-items:start so opening one card doesn't stretch its
    neighbour; the summary min-height keeps the collapsed cards level instead. */
 /* min() so the 420px floor collapses on phones instead of overflowing the screen */
-.faq__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 16px; max-width: 1160px; margin: 44px auto 0; align-items: start; }
+.faq__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 16px; max-width: 1160px; margin: 28px auto 0; align-items: start; }
 .faq__item { background: rgba(246,238,227,.04); border: 1px solid rgba(227,166,59,.16); border-radius: 14px; overflow: hidden; transition: border-color .3s, background .3s; }
 .faq__item[open] { border-color: rgba(227,166,59,.5); background: rgba(246,238,227,.06); }
 .faq__item summary {
@@ -968,7 +968,7 @@ section { position: relative; }
 .faq__ans p { opacity: .74; font-weight: 300; line-height: 1.65; font-size: 14.5px; }
 
 /* ---------- VISIT / MAP ---------- */
-.visit { background: var(--navy); padding: 0 clamp(20px,6vw,90px) clamp(72px,10vw,120px); }
+.visit { background: var(--navy); padding: 0 clamp(20px,6vw,90px) clamp(52px,6vw,76px); }
 .visit__inner { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px,5vw,64px); align-items: center; max-width: 1240px; margin: 0 auto; }
 .visit__copy .kicker { color: var(--gold); font-weight: 600; letter-spacing: 3px; font-size: 13px; text-transform: uppercase; }
 .visit__copy h2 { font-family: var(--font); font-weight: 800; letter-spacing: -0.02em; font-size: clamp(32px,4.4vw,58px); color: var(--white); margin: 12px 0 16px; line-height: 1.05; }
@@ -1151,3 +1151,6 @@ section { position: relative; }
   /* trim label tails ("on Google", "Appointment") so pairs still fit */
   .xs-hide { display: none; }
 }
+
+/* headings never strand a single word on line 2 */
+.stats__head h2, .treat__head h2, .tech__head h2, .vids__head h2, .gallery__head h2, .reviews__head h2, .faq__head h2, .results__head h2 { text-wrap: balance; }
