@@ -282,7 +282,7 @@ export default function App() {
         </div>
 
         <div className="reviews__cta">
-          <a className="btn-primary reviews__gbtn" href={REVIEW_RATING.url} target="_blank" rel="noopener noreferrer"><GoogleG size={20} /> Read all {REVIEW_RATING.count}+ reviews on Google</a>
+          <a className="btn-primary reviews__gbtn" href={REVIEW_RATING.url} target="_blank" rel="noopener noreferrer"><GoogleG size={20} /> <span className="xs-hide">Read all </span>{REVIEW_RATING.count}+ reviews<span className="xs-hide"> on Google</span></a>
           <a className="btn-ghost" href={REVIEW_RATING.writeUrl} target="_blank" rel="noopener noreferrer">✎ Write a review</a>
         </div>
       </section>
@@ -297,7 +297,7 @@ export default function App() {
             <p className="cta__sub">Drag the sliders to see real results from our Preet Vihar clinic.</p>
             <div className="cta__btns">
               <a className="btn-primary" href={telLink}>☏ Call Now</a>
-              <a className="btn-ghost" href={enquireLink} target="_blank" rel="noopener noreferrer">✆ WhatsApp Appointment</a>
+              <a className="btn-ghost" href={enquireLink} target="_blank" rel="noopener noreferrer">✆ WhatsApp<span className="xs-hide"> Appointment</span></a>
             </div>
             <p className="cta__hours"><span aria-hidden="true">🕘</span> {hoursLine}</p>
           </div>

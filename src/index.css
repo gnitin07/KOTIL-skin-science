@@ -1104,3 +1104,41 @@ section { position: relative; }
   .ai__pill:hover { transform: translateY(-2px); }
   .ai__panel { left: 10px; transform: none; width: calc(100vw - 20px); bottom: 10px; height: min(560px, calc(100dvh - 70px)); }
 }
+
+/* ---------- MOBILE COMPACTION ----------
+   On phones the desktop rhythm (72-120px section paddings, 86vh CTA, 16/34px
+   buttons) reads as dead space: adjacent sections stacked ~150px of nothing
+   and every button pair fell into a vertical stack. One consolidated block
+   keeps the cascade obvious. */
+@media (max-width: 760px) {
+  /* section rhythm: ~44px instead of 72px+ */
+  .stats, .vids, .gallery, .reviews, .faq, .results { padding-top: 44px; padding-bottom: 44px; }
+  .visit { padding-bottom: 48px; }
+  .footer__main { padding-top: 44px; padding-bottom: 30px; }
+  .treat__head { padding-top: 44px; }
+  .tech { padding-top: 44px; padding-bottom: 22px; }
+
+  /* section heads hug their content */
+  .tech__head { margin-bottom: 20px; }
+  .vids__head, .gallery__head, .results__head { margin-bottom: 24px; }
+  .stats__head { margin-bottom: 22px; }
+  .reviews__wrap { margin-top: 24px; }
+  .faq__grid { margin-top: 22px; }
+  .tech__nav { margin-top: 14px; }
+
+  /* the CTA no longer reserves 86vh — it is exactly its content */
+  .cta { min-height: auto; padding: 48px 20px 52px; }
+  .cta__inner { gap: 22px; }
+  .cta__compare { gap: 12px; }
+  .cta__btns { margin-top: 20px; gap: 10px; }
+  .cta__hours { margin-top: 14px; }
+  .reviews__cta { margin-top: 22px; gap: 10px; }
+  .visit__btns { gap: 10px; }
+
+  /* buttons small enough that every pair sits on ONE row */
+  .btn-primary, .btn-ghost { padding: 11px 18px; font-size: 14px; }
+}
+@media (max-width: 430px) {
+  /* trim label tails ("on Google", "Appointment") so pairs still fit */
+  .xs-hide { display: none; }
+}
