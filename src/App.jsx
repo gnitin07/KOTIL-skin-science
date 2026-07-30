@@ -9,7 +9,7 @@ import TechSlider from './components/TechSlider.jsx'
 import FloatingWhatsApp from './components/FloatingWhatsApp.jsx'
 import Assistant from './components/Assistant.jsx'
 
-export default function App() {
+export default function App({ consult = false }) {
   const root = useRef(null)
   // Lenis owns wheel/touch scrolling globally. Any modal must stop() it, or the
   // page keeps scrolling behind the dialog and the dialog itself won't scroll.
@@ -63,7 +63,7 @@ export default function App() {
   useSiteAnimations(root, lenisRef)
 
   return (
-    <div ref={root}>
+    <div ref={root} className={consult ? 'page--consult' : undefined}>
       {/* HEADER = utility strip + nav, fixed together. The strip is solid, so
           the banner is pushed down by its height (--topbar-h); the nav itself
           still floats transparently over the top of the banner. */}
@@ -94,7 +94,8 @@ export default function App() {
           <a href="#reviews">Reviews</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
         </div>
         <div className="nav__right">
-          <a className="nav__cta" href={enquireLink} target="_blank" rel="noopener noreferrer">Book Now</a>
+          {/* /consult replaces the nav CTA with the fixed bottom booking strip */}
+          {!consult && <a className="nav__cta" href={enquireLink} target="_blank" rel="noopener noreferrer">Book Now</a>}
           <button
             className={`nav__burger${menuOpen ? ' is-open' : ''}`}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -104,6 +105,11 @@ export default function App() {
         </div>
       </nav>
       </header>
+
+      {/* FLOW — everything from hero to CTA. Normal document order on the main
+          page; /consult flips it visually with CSS `order` (conversion first),
+          so both pages share one DOM and the anchors keep working. */}
+      <div className="flow">
 
       {/* HERO — auto-playing promo banner carousel */}
       <HeroBanner />
@@ -309,6 +315,8 @@ export default function App() {
         </div>
       </section>
 
+      </div>{/* /flow */}
+
       {/* FAQ */}
       <section className="faq" id="faq">
         <div className="faq__head">
@@ -469,6 +477,17 @@ export default function App() {
       {/* FLOATING CONTACT — WhatsApp launcher (right) + Kotil Assist (centre) */}
       <FloatingWhatsApp />
       <Assistant />
+
+      {/* /consult only: fixed bottom booking strip (replaces the nav CTA) */}
+      {consult && (
+        <div className="consultbar" role="complementary" aria-label="Book an appointment">
+          <p className="consultbar__offer">
+            <span className="consultbar__tag">Monsoon Sale</span>
+            <span className="consultbar__txt">Flat upto <b>30% off</b> on all treatments</span>
+          </p>
+          <a className="consultbar__btn" href={enquireLink} target="_blank" rel="noopener noreferrer">Book Appointment</a>
+        </div>
+      )}
     </div>
   )
 }

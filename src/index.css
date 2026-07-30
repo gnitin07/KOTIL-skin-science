@@ -1154,3 +1154,60 @@ section { position: relative; }
 
 /* headings never strand a single word on line 2 */
 .stats__head h2, .treat__head h2, .tech__head h2, .vids__head h2, .gallery__head h2, .reviews__head h2, .faq__head h2, .results__head h2 { text-wrap: balance; }
+
+/* ---------- /CONSULT LANDING PAGE ---------- */
+/* The flow region is one flex column; on /consult, CSS `order` flips it so the
+   booking CTA leads and everything that sat above it follows in reverse.
+   DOM order never changes, so both pages share markup and #anchors work. */
+.flow { display: flex; flex-direction: column; }
+.page--consult .flow > .cta      { order: 1; }
+.page--consult .flow > .reviews  { order: 2; }
+.page--consult .flow > .vids     { order: 3; }
+.page--consult .flow > .gallery  { order: 4; }
+.page--consult .flow > .marquee  { order: 5; }
+.page--consult .flow > .tech     { order: 6; }
+.page--consult .flow > .treat    { order: 7; }
+.page--consult .flow > .results  { order: 8; }
+.page--consult .flow > .stats    { order: 9; }
+.page--consult .flow > .hbanner  { order: 10; }
+
+/* first section sits under the fixed header (topbar + solid nav ≈ 120px) */
+.page--consult .flow { background: var(--navy); padding-top: 122px; }
+/* mid-page banner: no header offset needed there */
+.page--consult .hbanner { margin-top: 0; }
+/* room for the fixed strip so the footer is never hidden behind it */
+.page--consult { padding-bottom: 66px; }
+/* floating widgets ride above the strip */
+.page--consult .fwa { bottom: 82px; }
+.page--consult .ai__pill { bottom: 82px; }
+.page--consult .ai__panel { bottom: 82px; }
+
+/* the strip itself — offer left, booking button right */
+.consultbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 65;
+  display: flex; align-items: center; justify-content: center; gap: clamp(14px,3vw,34px);
+  padding: 10px clamp(14px,4vw,40px);
+  background: rgba(8,16,25,.96); backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(227,166,59,.35);
+  box-shadow: 0 -12px 34px rgba(0,0,0,.4);
+}
+.consultbar__offer { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.consultbar__tag {
+  flex: 0 0 auto; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase;
+  color: var(--gold-lite); border: 1px solid rgba(227,166,59,.45); border-radius: 100px; padding: 4px 10px;
+}
+.consultbar__txt { font-size: clamp(13px,1.6vw,15.5px); color: var(--cream); opacity: .92; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.consultbar__txt b { color: var(--gold-lite); }
+.consultbar__btn {
+  flex: 0 0 auto; background: var(--gold); color: var(--navy); font-weight: 700;
+  font-size: clamp(13.5px,1.5vw,15px); padding: 11px 22px; border-radius: 100px;
+  box-shadow: 0 8px 24px -6px rgba(227,166,59,.7);
+  transition: transform .2s var(--ease), box-shadow .2s;
+}
+.consultbar__btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px -6px rgba(227,166,59,.9); }
+
+@media (max-width: 560px) {
+  .page--consult .flow { padding-top: 112px; }
+  .consultbar { gap: 10px; padding: 9px 12px; }
+  .consultbar__tag { display: none; }          /* offer text + button fit one row */
+}

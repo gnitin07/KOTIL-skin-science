@@ -37,12 +37,18 @@ export function useSiteAnimations(root, lenisRef) {
     if (import.meta.env.DEV) { window.__lenis = lenis; window.__gsap = gsap; window.__ST = ScrollTrigger }
 
     // ---- navbar solidify ----
-    ScrollTrigger.create({
-      start: 'top -80', end: 99999,
-      onUpdate: (self) => {
-        document.querySelector('.nav')?.classList.toggle('scrolled', self.scroll() > 80)
-      },
-    })
+    // /consult starts on a navy section, so the transparent-over-banner nav
+    // (dark logo/links) would be invisible there: pin it solid instead.
+    if (document.querySelector('.page--consult')) {
+      document.querySelector('.nav')?.classList.add('scrolled')
+    } else {
+      ScrollTrigger.create({
+        start: 'top -80', end: 99999,
+        onUpdate: (self) => {
+          document.querySelector('.nav')?.classList.toggle('scrolled', self.scroll() > 80)
+        },
+      })
+    }
 
     // ---- hero intro on load: everything animates in automatically, incl. the
     // treatment cutout (she slides in on refresh — NO scroll needed). ----
