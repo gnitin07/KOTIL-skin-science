@@ -1,3 +1,25 @@
 {
+  "redirects": [
+    { "source": "/contact-us/", "destination": "/#contact", "permanent": true },
+    { "source": "/contact-us", "destination": "/#contact", "permanent": true },
+    { "source": "/services/", "destination": "/#treatments", "permanent": true },
+    { "source": "/our-service/", "destination": "/#treatments", "permanent": true },
+    { "source": "/all-treatment/", "destination": "/#treatments", "permanent": true },
+    { "source": "/treatment/", "destination": "/#treatments", "permanent": true },
+    { "source": "/hydrafacial-treatment/", "destination": "/#treatments", "permanent": true },
+    { "source": "/pigmentation-treatment/", "destination": "/#treatments", "permanent": true },
+    { "source": "/laser-treatment/", "destination": "/#treatments", "permanent": true },
+    { "source": "/laser-hair-reduction-lhr-clinic-in-delhi/", "destination": "/#treatments", "permanent": true },
+    { "source": "/growth-factor-concentrate-gfc-treatment/", "destination": "/#treatments", "permanent": true },
+    { "source": "/high-intensity-focused-ultrasound-hifu-treatment-clinic/", "destination": "/#treatments", "permanent": true },
+    { "source": "/kotil-expert/", "destination": "/#tech", "permanent": true },
+    { "source": "/kotil-skin-experts/", "destination": "/#tech", "permanent": true },
+
+    {
+      "source": "/:path((?!consult$)(?!consult/$)(?!assets/)(?!banners/)(?!clinic/)(?!compare/)(?!services/)(?!videos/)(?!results/)(?!favicon\\.png$)(?!apple-touch-icon\\.png$)(?!og\\.jpg$)(?!robots\\.txt$)(?!sitemap\\.xml$)(?!index\\.html$).+)",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
