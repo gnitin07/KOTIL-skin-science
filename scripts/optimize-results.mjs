@@ -50,5 +50,7 @@ for (let i = 0; i < files.length; i++) {
 }
 
 console.log(`\nTOTAL ${kb(before)} -> ${kb(after)}  (${(100 - (after / before) * 100).toFixed(1)}% smaller)`)
-console.log(`\nPaste into src/data.js (set each `treatment` to the real one):\n`)
+// Plain quotes, not a template literal: the word treatment is wrapped in
+// backticks here, which would close the template and break the file.
+console.log("\nPaste into src/data.js (set each `treatment` to the real one):\n")
 console.log('export const RESULTS = [\n' + entries.join('\n') + '\n]')

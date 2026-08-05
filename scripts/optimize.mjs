@@ -14,13 +14,16 @@ await mkdir(OUT_DIR, { recursive: true })
 //   extra.alpha -> keep transparency (higher quality alpha channel)
 const JOBS = [
   // trim crops the transparent margin off each cut-out so it sits on the rig floor
-  ...['m1', 'm2', 'm3', 'm4'].map((n) => [`${n}.png`, `${n}.webp`, { height: 1500 }, { trim: true, alpha: true }]),
-  ['team.png', 'team.webp', { width: 2000 }, { alpha: true }],
-  // NB: the hero uses the BACKGROUND-REMOVED cut-out, not the original photo.
-  // Pointing this at hero-treatment.png silently ships the grey studio backdrop.
-  ['hero-treatment-cutout.png', 'hero-treatment.webp', { height: 1400 }, { trim: true, alpha: true }],
-  ['glow.png', 'glow.webp', { width: 2000 }],
+  // 1000px, not 1500: .tech__media img caps the machine photo at 480px tall
+  // (clamp(320px, 44vw, 480px)), so 1500 was ~3x oversampled and m2 alone was
+  // the single heaviest thing on the page. 1000 still covers a 2x screen.
+  ...['m1', 'm2', 'm3', 'm4'].map((n) => [`${n}.png`, `${n}.webp`, { height: 1000 }, { trim: true, alpha: true }]),
   ...['t1', 't2', 't3', 't4', 't5'].map((n) => [`${n}.png`, `${n}.webp`, { width: 900 }]),
+  // Removed: team / hero-treatment / glow. They were left over from the old
+  // GSAP hero rig, which TechSlider replaced — nothing in src/ renders them, so
+  // they were ~590KB of WebP+AVIF shipping to Vercel for no reason. Their raw
+  // originals went with them; `git show e8f38a3` has them if the design ever
+  // wants that hero back.
 ]
 
 const kb = (b) => (b / 1024).toFixed(0) + 'KB'

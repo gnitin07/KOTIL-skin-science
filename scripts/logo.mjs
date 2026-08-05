@@ -1,8 +1,8 @@
 // Extract the Kotil logo (incl. the ® mark) from the white-background screenshot
-// into transparent PNGs.
-//   kotil-logo.png       - original colours (black wordmark) for light backgrounds
-//   kotil-logo-light.png - wordmark recoloured to cream for the dark navy nav
-// Run: node scripts/logo.mjs
+// into transparent WebP.
+//   kotil-logo.webp       - original colours (black wordmark) for light backgrounds
+//   kotil-logo-light.webp - wordmark recoloured to cream for the dark navy nav
+// Run: npm run assets:logo
 import sharp from 'sharp'
 import path from 'node:path'
 
@@ -79,12 +79,29 @@ console.log(`ink bounds x:${minX}-${maxX} y:${minY}-${maxY} -> ${cropW}x${cropH}
 
 const raw = { raw: { width, height, channels: 4 } }
 
-for (const [buf, name] of [[normal, 'kotil-logo.png'], [light, 'kotil-logo-light.png']]) {
+// The nav cross-fades the two variants on scroll, so BOTH ship on every page
+// load. As 220px PNGs that was ~81KB of the first paint.
+//
+// WebP only — no PNG. The favicon comes from its own source
+// (raw-assets/kotil-favicon-source.png, see favicon.mjs) and the social card is
+// og.jpg, so nothing ever read the logo PNGs; they just shipped.
+for (const [buf, name] of [[normal, 'kotil-logo'], [light, 'kotil-logo-light']]) {
+  const webpPath = path.join(OUT, `${name}.webp`)
+
+  // The nav renders the logo at most 48px tall (see .nav__logo img), so 220px
+  // was ~4.5x oversampled. 128px still covers a 2.7x DPR screen and costs a
+  // third of the bytes. Lossless because lossy rings on the hard serif edges
+  // and, at this size, does not even come out smaller.
   await sharp(buf, raw)
     .extract({ left: minX, top: minY, width: cropW, height: cropH })
-    .resize({ height: 220, withoutEnlargement: true }) // 2x for a ~110px nav logo
-    .png({ compressionLevel: 9 })
-    .toFile(path.join(OUT, name))
-  const meta = await sharp(path.join(OUT, name)).metadata()
-  console.log(`${name.padEnd(22)} ${meta.width}x${meta.height}  alpha=${meta.hasAlpha}`)
+    .resize({ height: 128, withoutEnlargement: true })
+    .webp({ lossless: true, effort: 6 })
+    .toFile(webpPath)
+
+  const meta = await sharp(webpPath).metadata()
+  const webp = (await sharp(webpPath).toBuffer()).length
+  console.log(
+    `${name.padEnd(18)} ${meta.width}x${meta.height} alpha=${meta.hasAlpha}  ` +
+    `webp ${(webp / 1024).toFixed(1)}KB`
+  )
 }

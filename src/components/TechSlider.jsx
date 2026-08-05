@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { MACHINES } from '../data.js'
+import { useRevealed } from '../useRevealed.js'
+import { useNearViewport } from '../useNearViewport.js'
+import Img from './Img.jsx'
 
 const SLIDE_MS = 5000
 
@@ -13,6 +16,11 @@ const SLIDE_MS = 5000
 export default function TechSlider() {
   const [index, setIndex] = useState(0)
   const count = MACHINES.length
+  const revealed = useRevealed(index, count)
+  // useRevealed alone still costs a machine photo (or several, since the timer
+  // keeps advancing until the pause observer catches up) for a visitor who never
+  // scrolls this far. Gate the whole stage on proximity as well.
+  const [stageRef, stageNear] = useNearViewport()
   const timer = useRef(null)
   const paused = useRef(false)
   const inView = useRef(true) // optimistic: IO is only ever a pause optimisation
@@ -65,7 +73,7 @@ export default function TechSlider() {
         <h2>The machines behind the results</h2>
       </div>
 
-      <div className="tech__stage">
+      <div className="tech__stage" ref={stageRef}>
         {MACHINES.map((m, i) => (
           <article
             className={`tech__slide${i === index ? ' is-active' : ''}`}
@@ -85,10 +93,18 @@ export default function TechSlider() {
               </div>
             </div>
             <div className="tech__media">
-              {/* NOT lazy: inactive slides are visibility:hidden and lazy
-                  images inside hidden boxes never intersect, so they'd stay
-                  blank forever (same failure the gallery hit). ~100KB each. */}
-              <img src={m.img} alt={`${m.name} — ${m.tag}`} />
+              {/* Still NOT lazy — inactive slides are visibility:hidden and a lazy
+                  image inside a hidden box never intersects, so it would stay blank
+                  forever (the same failure the gallery hit). useRevealed does the
+                  gating instead: only the current slide (~100KB) is in the DOM at
+                  first paint, the next arrives on an idle tick. */}
+              {/* No width/height: each machine is a trimmed cut-out with its own
+                  aspect ratio (979x882, 832x1000, ...) and .tech__media img sets
+                  only max-width/max-height, so a fixed pair here would letterbox
+                  the photo into the wrong box. Intrinsic dimensions are correct. */}
+              {stageNear && revealed.has(i) && (
+                <Img src={m.img} alt={`${m.name} — ${m.tag}`} loading="eager" />
+              )}
             </div>
           </article>
         ))}

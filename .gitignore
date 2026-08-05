@@ -22,3 +22,6 @@ Thumbs.db
 
 .vercel
 .env*
+
+# local-only Claude Code permissions
+.claude/settings.local.json

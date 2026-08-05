@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { BANNERS } from '../data.js'
+import { useRevealed } from '../useRevealed.js'
+import AVIF_URLS from '../avif-manifest.json'
+
+const HAS_AVIF = new Set(AVIF_URLS)
+const avif = (url) => (HAS_AVIF.has(url) ? url.replace(/\.webp$/, '.avif') : null)
 
 const SLIDE_MS = 4000
 
@@ -13,6 +18,7 @@ const SLIDE_MS = 4000
 export default function HeroBanner() {
   const [index, setIndex] = useState(0)
   const count = BANNERS.length
+  const revealed = useRevealed(index, count)
   const timer = useRef(null)
   const paused = useRef(false)
   const inView = useRef(true)
@@ -78,11 +84,25 @@ export default function HeroBanner() {
             aria-label={b.cta}
             aria-hidden={i !== index} tabIndex={i === index ? 0 : -1}
           >
-            <picture>
-              <source media="(max-width: 768px)" srcSet={b.mobile} />
-              <source media="(min-width: 769px)" srcSet={b.desktop} />
-              <img src={b.desktop} alt={b.alt} loading={i === 0 ? 'eager' : 'lazy'} />
-            </picture>
+            {/* Only the visible slide is mounted (see useRevealed) — all four
+                used to download during first paint, ~430KB, to show one.
+                No width/height: the portrait mobile crop and the landscape
+                desktop crop have different ratios, so the CSS owns sizing.
+                AVIF <source> must precede its WebP twin — first match wins. */}
+            {revealed.has(i) && (
+              <picture>
+                {avif(b.mobile) && <source media="(max-width: 768px)" srcSet={avif(b.mobile)} type="image/avif" />}
+                <source media="(max-width: 768px)" srcSet={b.mobile} type="image/webp" />
+                {avif(b.desktop) && <source media="(min-width: 769px)" srcSet={avif(b.desktop)} type="image/avif" />}
+                <source media="(min-width: 769px)" srcSet={b.desktop} type="image/webp" />
+                <img
+                  src={b.desktop} alt={b.alt}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding={i === 0 ? 'sync' : 'async'}
+                  {...(i === 0 ? { fetchPriority: 'high' } : {})}
+                />
+              </picture>
+            )}
           </a>
         ))}
       </div>

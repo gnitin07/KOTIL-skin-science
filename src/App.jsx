@@ -1,10 +1,13 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { useSiteAnimations } from './animations.js'
+import { useNearViewport } from './useNearViewport.js'
 import { TREATMENTS, STATS, REVIEWS, REVIEW_RATING, FAQS, GALLERY, ALL_TREATMENTS, RESULTS, VIDEOS, COMPARISONS } from './data.js'
 import { CLINIC, SOCIALS, telLink, mailLink, bookLink, enquireLink, directionsLink, mapEmbedSrc, hoursLine } from './config.js'
 import { GoogleG, SOCIAL_ICONS, STAT_ICONS } from './components/icons.jsx'
+import Img from './components/Img.jsx'
 import HeroBanner from './components/HeroBanner.jsx'
 import BeforeAfter from './components/BeforeAfter.jsx'
+import VideoCard from './components/VideoCard.jsx'
 import TechSlider from './components/TechSlider.jsx'
 import FloatingWhatsApp from './components/FloatingWhatsApp.jsx'
 import Assistant from './components/Assistant.jsx'
@@ -17,6 +20,15 @@ export default function App({ consult = false }) {
 
   // ---- mobile nav ----
   const [menuOpen, setMenuOpen] = useState(false)
+
+  // ---- image loading gates ----
+  // These three sections hold most of the page's weight, and every one of them
+  // is GSAP-revealed, so loading="lazy" on the photos inside would only fire
+  // after the reveal. Gate on the (never-hidden) container instead — see
+  // useNearViewport. A visitor who stops above them downloads none of it.
+  const [treatRef, treatNear] = useNearViewport()
+  const [galleryRef, galleryNear] = useNearViewport()
+  const [vidsRef, vidsNear] = useNearViewport()
 
   // ---- "all treatments" panel ----
   const [allOpen, setAllOpen] = useState(false)
@@ -85,8 +97,10 @@ export default function App({ consult = false }) {
       <nav className="nav">
         <a className="nav__logo" href="#home" aria-label="Kotil Skin Science home">
           {/* dark logo over the light banner (nav transparent); swaps to the light one when the nav goes solid on scroll */}
-          <img className="nav__logo-dark" src="/assets/kotil-logo.png" alt="Kotil Skin Science" />
-          <img className="nav__logo-light" src="/assets/kotil-logo-light.png" alt="" aria-hidden="true" />
+          {/* Both variants ship on every load — the nav cross-fades them on scroll —
+              so they are the one pair of images worth paying for up front. */}
+          <Img className="nav__logo-dark" src="/assets/kotil-logo.webp" alt="Kotil Skin Science" width={354} height={128} eager />
+          <Img className="nav__logo-light" src="/assets/kotil-logo-light.webp" alt="" aria-hidden="true" width={354} height={128} eager />
         </a>
         <div className={`nav__links${menuOpen ? ' is-open' : ''}`} onClick={() => setMenuOpen(false)}>
           <a href="#treatments">Services</a><a href="#tech">Technology</a>
@@ -144,7 +158,7 @@ export default function App({ consult = false }) {
           <div className="results__grid">
             {RESULTS.map((r) => (
               <figure className="rcard" key={r.src}>
-                <img src={r.src} alt={r.alt} />
+                <Img src={r.src} alt={r.alt} width={800} height={800} />
                 <span className="rcard__tag">Before / After</span>
                 <figcaption>{r.treatment}</figcaption>
               </figure>
@@ -166,10 +180,10 @@ export default function App({ consult = false }) {
           <button className="treat__arrow treat__arrow--next" aria-label="Next treatments">›</button>
           {/* data-lenis-prevent: let the browser handle horizontal wheel/trackpad
               scrolling here instead of Lenis swallowing the event */}
-          <div className="treat__track" data-lenis-prevent>
+          <div className="treat__track" data-lenis-prevent ref={treatRef}>
             {TREATMENTS.map((t) => (
               <article className="card" key={t.title}>
-                <img src={t.img} alt={t.title} />
+                {treatNear && <Img src={t.img} alt={t.title} loading="eager" width={600} height={800} />}
                 <div className="card__grad" />
                 <span className="card__off">{t.off}</span>
                 <div className="card__body">
@@ -214,10 +228,10 @@ export default function App({ consult = false }) {
           <h2>Our Clinic Gallery</h2>
           <p>Take a look inside our reception, private treatment rooms and advanced technology.</p>
         </div>
-        <div className="gallery__grid">
+        <div className="gallery__grid" ref={galleryRef}>
           {GALLERY.map((g, i) => (
             <button className={`gtile gtile--${g.cls}`} key={g.src} onClick={() => openLb(i)} aria-label={`Open photo: ${g.alt}`}>
-              <img src={g.src} alt={g.alt} />
+              {galleryNear && <Img src={g.src} alt={g.alt} loading="eager" width={900} height={700} />}
               <span className="gtile__zoom" aria-hidden>⤢</span>
             </button>
           ))}
@@ -231,18 +245,12 @@ export default function App({ consult = false }) {
           <h2>See our treatments in action</h2>
           <p>Short clips from real sessions at Kotil Skin Science.</p>
         </div>
-        <div className="vids__grid">
+        <div className="vids__grid" ref={vidsRef}>
           {VIDEOS.map((v, i) => (
             /* --a..--e place each clip explicitly so the bento tiles a perfect
                rectangle with no leftover cells (see .vcard--a..e in CSS) */
             <figure className={`vcard vcard--${'abcde'[i] || 'e'}`} key={v.src}>
-              <video
-                src={v.src}
-                poster={v.poster}
-                controls
-                preload="none"
-                playsInline
-              />
+              <VideoCard src={v.src} poster={v.poster} title={v.title} showPoster={vidsNear} />
               <figcaption>{v.title}</figcaption>
             </figure>
           ))}
@@ -364,7 +372,7 @@ export default function App({ consult = false }) {
       <footer className="footer">
         <div className="footer__main">
           <div className="footer__brand">
-            <img src="/assets/kotil-logo-light.png" alt="Kotil Skin Science" />
+            <Img src="/assets/kotil-logo-light.webp" alt="Kotil Skin Science" width={354} height={128} />
             <p>Consultation-first skin, hair &amp; body care. Diagnosis before products, always.</p>
           </div>
 
@@ -426,9 +434,11 @@ export default function App({ consult = false }) {
                     {g.items.map((t) => (
                       <article className="tcard" key={t.name}>
                         <div className="tcard__media">
-                          {/* no loading="lazy": the modal is conditionally rendered, so these
-                              only mount when it opens — and lazy stops them loading in-modal. */}
-                          <img src={t.img} alt={t.name} />
+                          {/* loading="eager" overrides the <Img> default (rest props win):
+                              the modal is conditionally rendered, so these only mount when it
+                              opens — and lazy stops them loading in-modal. Nothing here is
+                              fetched until the user asks for the full menu. */}
+                          <Img src={t.img} alt={t.name} loading="eager" width={400} height={300} />
                           <span className="tcard__off">{t.off}</span>
                         </div>
                         <div className="tcard__body">
@@ -467,7 +477,7 @@ export default function App({ consult = false }) {
           <button className="lb__close" aria-label="Close" onClick={closeLb}>×</button>
           <button className="lb__nav lb__nav--prev" aria-label="Previous photo" onClick={(e) => { e.stopPropagation(); stepLb(-1) }}>‹</button>
           <figure className="lb__stage" onClick={(e) => e.stopPropagation()}>
-            <img src={GALLERY[lightbox].src} alt={GALLERY[lightbox].alt} />
+            <Img src={GALLERY[lightbox].src} alt={GALLERY[lightbox].alt} eager />
             <figcaption>{GALLERY[lightbox].alt}<span className="lb__count">{lightbox + 1} / {GALLERY.length}</span></figcaption>
           </figure>
           <button className="lb__nav lb__nav--next" aria-label="Next photo" onClick={(e) => { e.stopPropagation(); stepLb(1) }}>›</button>

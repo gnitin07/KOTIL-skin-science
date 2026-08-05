@@ -68,7 +68,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- One family, full weight range. Hierarchy comes from weight + tracking,
          not from mixing typefaces. -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <!-- Weights must match what index.css actually sets. 900 was requested but
+         never used anywhere, which cost an extra woff2 download per visitor. -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>

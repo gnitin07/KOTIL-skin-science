@@ -21,5 +21,29 @@
       "permanent": true
     }
   ],
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+
+  "headers": [
+    {
+      "//": "Every media file below has a stable, generated filename, so a repeat visitor should never re-download one. immutable also skips the revalidation round-trip entirely. TRADE-OFF: replacing an image in place will NOT reach anyone who already cached it. To publish a changed picture, give it a new filename (g7.webp -> g8.webp) — that is what the scripts/*.mjs pipeline is for.",
+      "source": "/(assets|banners|clinic|compare|services|videos|results)/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "//": "Icons and the social card change rarely but are not worth freezing for a year.",
+      "source": "/(favicon.png|apple-touch-icon.png|og.jpg)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "//": "Global, and deliberately sets no Cache-Control: a second rule matching the same path with the same key would fight the immutable rule above. HTML keeps Vercel's default (max-age=0, must-revalidate) so a deploy goes live immediately.",
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" }
+      ]
+    }
+  ]
 }

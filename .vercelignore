@@ -1,0 +1,19 @@
+# Kept out of the deployment. `vite build` only needs index.html, src/,
+# public/, vite.config.js and package.json — everything below is source
+# material or tooling that would just inflate the upload and the build.
+#
+# NB: this does NOT affect Fast Data Transfer (nothing here was ever served).
+# It reduces deployment size and build time, which is the other thing that
+# bites on Hobby: 100 MB static file uploads, 100 deploys/day.
+
+# 193 MB of high-res originals, versioned via Git LFS
+raw-assets
+
+# original clinic photos as supplied; public/clinic/ holds the shipped crops
+clinic
+
+# the sharp/ffmpeg asset pipeline — run locally, never during a Vercel build
+scripts
+
+# build output; Vercel produces its own
+dist

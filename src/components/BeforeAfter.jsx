@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback } from 'react'
+import Img from './Img.jsx'
 
 /**
  * Draggable before/after comparison.
@@ -63,8 +64,8 @@ export default function BeforeAfter({ before, after, alt, label, width, height }
         aria-valuemax={100}
         aria-valuenow={Math.round(pos)}
       >
-        <img className="ba__img" src={after} alt={`${alt}, after treatment`} draggable="false" />
-        <img className="ba__img ba__img--before" src={before} alt={`${alt}, before treatment`} draggable="false" />
+        <Img className="ba__img" src={after} alt={`${alt}, after treatment`} draggable="false" width={width} height={height} />
+        <Img className="ba__img ba__img--before" src={before} alt={`${alt}, before treatment`} draggable="false" width={width} height={height} />
         <span className="ba__tag ba__tag--before">Before</span>
         <span className="ba__tag ba__tag--after">After</span>
         <span className="ba__handle" aria-hidden="true"><span className="ba__grip" /></span>

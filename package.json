@@ -15,7 +15,9 @@
     "assets:videos": "node scripts/optimize-videos.mjs",
     "assets:results": "node scripts/optimize-results.mjs",
     "assets:banners": "node scripts/optimize-banners.mjs",
-    "assets:compare": "node scripts/optimize-compare.mjs"
+    "assets:compare": "node scripts/optimize-compare.mjs",
+    "assets:avif": "node scripts/avif.mjs",
+    "assets:all": "npm run assets:logo && npm run assets:favicon && npm run assets:optimize && npm run assets:services && npm run assets:banners && npm run assets:compare && npm run assets:results && npm run assets:videos && npm run assets:avif"
   },
   "engines": {
     "node": ">=18"

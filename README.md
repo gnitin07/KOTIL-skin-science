@@ -59,7 +59,7 @@ src/
   components/
     icons.jsx         inline Google + social SVG marks
 public/
-  assets/             optimised site imagery (webp)
+  assets/             optimised site imagery (webp + avif twin)
   clinic/             clinic gallery photos
   services/           one photo per treatment (generated, see below)
 scripts/              one-off asset pipeline tools (not part of the build)
@@ -95,11 +95,29 @@ Large originals live in `raw-assets/` (Git LFS). These scripts turn them into th
 web-sized files in `public/`. Run them only when source media changes.
 
 ```bash
-npm run assets:optimize    # raw photos           -> public/assets/*.webp (98% smaller)
-npm run assets:services    # services screenshots -> public/services/<slug>.webp (37 crops)
-npm run assets:logo        # logo screenshot      -> transparent PNG (dark + light)
-npm run assets:favicon     # logo                 -> public/favicon.png
+npm run assets:all         # everything below, in dependency order
 ```
+
+```bash
+npm run assets:optimize    # raw photos           -> public/assets/*.webp (97% smaller)
+npm run assets:services    # services screenshots -> public/services/<slug>.webp (37 crops)
+npm run assets:logo        # logo screenshot      -> transparent webp (dark + light)
+npm run assets:favicon     # brand K mark         -> public/favicon.png
+npm run assets:banners     # hero banners         -> desktop + mobile crops
+npm run assets:compare     # before/after pairs   -> matched crops
+npm run assets:videos      # clips                -> public/videos/*.mp4 + poster
+npm run assets:results     # before/after results -> public/results/ (source dir optional)
+npm run assets:avif        # ALWAYS LAST          -> an .avif twin per shipped .webp
+```
+
+`assets:avif` reads the WebP the other scripts just wrote, so it has to run
+last — that is the only ordering constraint, and `assets:all` encodes it. It
+also writes `src/avif-manifest.json`, which is how `<Img>` knows whether an
+AVIF exists to offer. Regenerate images without re-running it and the manifest
+goes stale.
+
+Every file in `public/` is referenced by `src/` — there are no spare assets. If
+you add one, wire it up or it is dead weight shipping to Vercel on every deploy.
 
 `assets:services` is the clever one: it locates each card in a screenshot by
 detecting the light "gutter" columns between cards, finds the photo band by
