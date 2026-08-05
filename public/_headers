@@ -1,0 +1,37 @@
+# Cloudflare Pages equivalent of the "headers" block in vercel.json.
+# Pages does NOT read vercel.json — without this file every asset falls back
+# to a short default cache and the whole point of the optimisation is lost.
+# Vite copies public/ to the root of dist/, which is where Pages looks for it.
+#
+# Rules are capped at 100; this uses 8.
+
+# Global. Deliberately sets no Cache-Control — a broad rule carrying the same
+# header as a narrow one below would fight it. HTML keeps the platform default
+# so a deploy goes live immediately.
+/*
+  X-Content-Type-Options: nosniff
+
+# Every file below has a stable, generated filename, so a repeat visitor should
+# never re-download one. immutable also skips the revalidation round-trip.
+# TRADE-OFF: replacing an image in place will NOT reach anyone who already
+# cached it. To publish a changed picture, give it a new filename.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/banners/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/clinic/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/compare/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/services/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/videos/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/results/*
+  Cache-Control: public, max-age=31536000, immutable

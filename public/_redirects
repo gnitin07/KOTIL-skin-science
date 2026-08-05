@@ -1,0 +1,39 @@
+# Cloudflare Pages equivalent of the "redirects" + "rewrites" blocks in
+# vercel.json. Pages does NOT read vercel.json.
+#
+# Order matters — the FIRST matching rule wins, so the specific old-WordPress
+# URLs must come before the catch-all at the bottom. Real files on disk are
+# served before any /* rule is considered, which is what keeps /assets/*.avif,
+# /videos/*.mp4, favicon.png etc. working.
+#
+# Limit is 2,000 static redirects; this uses 17.
+
+# ---- old WordPress URLs Google still has indexed ----
+# 301 (not 302) so the ranking transfers to the new page.
+/contact-us/                                            /#contact     301
+/contact-us                                             /#contact     301
+/services/                                              /#treatments  301
+/our-service/                                           /#treatments  301
+/all-treatment/                                         /#treatments  301
+/treatment/                                             /#treatments  301
+/hydrafacial-treatment/                                 /#treatments  301
+/pigmentation-treatment/                                /#treatments  301
+/laser-treatment/                                       /#treatments  301
+/laser-hair-reduction-lhr-clinic-in-delhi/              /#treatments  301
+/growth-factor-concentrate-gfc-treatment/               /#treatments  301
+/high-intensity-focused-ultrasound-hifu-treatment-clinic/ /#treatments 301
+/kotil-expert/                                          /#tech        301
+/kotil-skin-experts/                                    /#tech        301
+
+# ---- the one real second route ----
+# 200, not 301: this rewrites (serves index.html AT /consult) rather than
+# redirecting, so App renders with consult=true and the URL stays put.
+/consult/                                               /index.html   200
+/consult                                                /index.html   200
+
+# ---- everything else ----
+# Any other path is a dead WordPress URL. 301 it to the homepage rather than
+# soft-serving the site at a bogus address, which is what Google penalises.
+# This replaces the big negative-lookahead regex in vercel.json: it is not
+# needed here because Pages serves real files before reaching this line.
+/*                                                      /             301
