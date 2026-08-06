@@ -17,3 +17,11 @@ scripts
 
 # build output; Vercel produces its own
 dist
+
+# Apache/LiteSpeed routing for Hostinger. Vercel does not run Apache, so it
+# would ignore the file as config — but Vite copies public/ into dist/, which
+# would leave it downloadable at /.htaccess on the vercel.app URL. Excluding it
+# here means the Vercel build never receives it, so the two hosts share one
+# repo with genuinely zero overlap: Hostinger reads .htaccess, Vercel reads
+# vercel.json, and neither can be confused by the other's file.
+public/.htaccess

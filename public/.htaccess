@@ -1,0 +1,138 @@
+# Kotil Skin Science — routing and caching for Hostinger (LiteSpeed/Apache).
+#
+# WHY THIS FILE EXISTS
+# Hostinger reads .htaccess and nothing else. It does NOT read vercel.json.
+# Without this file the site still loads, but three things silently break:
+#   1. /consult 404s on refresh or a direct visit (it is a client-side route)
+#   2. all 14 legacy WordPress URLs Google still has indexed become 404s
+#   3. every image and video loses its one-year cache, so repeat visitors
+#      re-download ~20 MB — undoing the work in commit a8b5d04
+#
+# vercel.json STAYS in the repo and stays authoritative for Vercel, which is
+# the rollback target while the domain moves. The two files must agree; if you
+# add a redirect, add it in BOTH. There are only 14 and they are frozen legacy
+# URLs, so this is a one-time cost rather than an ongoing one.
+#
+# Vite copies public/ to the root of dist/, so this lands next to index.html —
+# which is where Hostinger looks for it in public_html.
+
+# ---------------------------------------------------------------------------
+# Directory listings. Without this, any folder lacking an index file exposes
+# its contents — /videos/ would list every mp4.
+# ---------------------------------------------------------------------------
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# -------------------------------------------------------------------------
+# 1. Old WordPress URLs Google still has indexed.
+#
+# These run FIRST, before the real-file check, because they must win even if
+# a path ever collides with something on disk.
+#
+# The NE (noescape) flag is load-bearing: without it Apache percent-encodes
+# the "#" to %23 and the browser lands on the literal path "/%23treatments"
+# instead of scrolling to the section. 301 (not 302) so ranking transfers.
+# -------------------------------------------------------------------------
+RewriteRule ^contact-us/?$                                          /#contact    [R=301,L,NE]
+RewriteRule ^services/?$                                            /#treatments [R=301,L,NE]
+RewriteRule ^our-service/?$                                         /#treatments [R=301,L,NE]
+RewriteRule ^all-treatment/?$                                       /#treatments [R=301,L,NE]
+RewriteRule ^treatment/?$                                           /#treatments [R=301,L,NE]
+RewriteRule ^hydrafacial-treatment/?$                               /#treatments [R=301,L,NE]
+RewriteRule ^pigmentation-treatment/?$                              /#treatments [R=301,L,NE]
+RewriteRule ^laser-treatment/?$                                     /#treatments [R=301,L,NE]
+RewriteRule ^laser-hair-reduction-lhr-clinic-in-delhi/?$            /#treatments [R=301,L,NE]
+RewriteRule ^growth-factor-concentrate-gfc-treatment/?$             /#treatments [R=301,L,NE]
+RewriteRule ^high-intensity-focused-ultrasound-hifu-treatment-clinic/?$ /#treatments [R=301,L,NE]
+RewriteRule ^kotil-expert/?$                                        /#tech       [R=301,L,NE]
+RewriteRule ^kotil-skin-experts/?$                                  /#tech       [R=301,L,NE]
+
+# -------------------------------------------------------------------------
+# 2. The one real second route.
+#
+# A rewrite, not a redirect: index.html is served AT /consult, so React
+# renders the consult view and the address bar keeps the URL. A 301 here
+# would bounce the visitor to the homepage instead.
+# -------------------------------------------------------------------------
+RewriteRule ^consult/?$ /index.html [L]
+
+# -------------------------------------------------------------------------
+# 3. Real files win.
+#
+# Anything that exists on disk — /assets/*, /videos/*, /banners/*, favicon,
+# sitemap.xml, robots.txt — is served as-is and never reaches rule 4.
+#
+# This replaces the long negative-lookahead regex in vercel.json. That regex
+# had to name every asset directory by hand because Vercel evaluates
+# redirects BEFORE touching the filesystem; Apache lets us just ask whether
+# the file is there, so a new asset folder needs no edit here.
+# -------------------------------------------------------------------------
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# -------------------------------------------------------------------------
+# 4. Everything else is a dead WordPress URL.
+#
+# 301 to the homepage rather than soft-serving the site at a bogus address,
+# which is what Google penalises. This is the same call as commit 2647e21.
+# -------------------------------------------------------------------------
+RewriteRule ^ / [R=301,L]
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Caching.
+#
+# Every file in these directories has a stable, generated filename produced by
+# the scripts/*.mjs pipeline, so a repeat visitor should never re-download one.
+# "immutable" also skips the revalidation round-trip entirely.
+#
+# TRADE-OFF, unchanged from vercel.json: replacing an image in place will NOT
+# reach anyone who already cached it. To publish a changed picture, give it a
+# new filename (g7.webp -> g8.webp). That is what the asset scripts are for.
+# ---------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  # Apache cannot use <LocationMatch> inside .htaccess, so the path test goes
+  # through an environment variable instead.
+  SetEnvIf Request_URI "^/(assets|banners|clinic|compare|services|videos|results)/" LONG_CACHE=1
+  Header set Cache-Control "public, max-age=31536000, immutable" env=LONG_CACHE
+
+  # Icons and the social card change rarely but are not content-hashed, so
+  # they get a week rather than a year — they do get replaced in place.
+  SetEnvIf Request_URI "^/(favicon\.png|apple-touch-icon\.png|og\.jpg)$" WEEK_CACHE=1
+  Header set Cache-Control "public, max-age=604800, stale-while-revalidate=86400" env=WEEK_CACHE
+
+  # HTML must never be cached hard, or a deploy does not go live until every
+  # visitor's cache expires. Vercel does this by default; Apache does not.
+  <FilesMatch "\.html$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+
+  # Global, matching the last rule in vercel.json.
+  Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Compression. LiteSpeed usually enables this, but saying so explicitly means
+# the JS/CSS bundles stay ~21 KB and ~10 KB over the wire rather than 66 KB
+# and 52 KB if a server default ever changes. Images and video are already
+# compressed — re-compressing them wastes CPU for nothing.
+# ---------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# MIME types. A wrong Content-Type on these is the usual cause of "the video
+# does not play" and "the AVIF images are blank" on shared hosting.
+# ---------------------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType video/mp4   .mp4
+  AddType image/avif  .avif
+  AddType image/webp  .webp
+</IfModule>
