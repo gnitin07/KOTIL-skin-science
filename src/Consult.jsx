@@ -253,7 +253,7 @@ function Compare({ before, after, label, alt, width, height }) {
   const down = (e) => { dragging.current = true; set(e.touches ? e.touches[0].clientX : e.clientX) }
 
   return (
-    <div>
+    <div className="cba__wrap">
       <div
         className="cba" ref={frame} style={{ '--pos': `${pos}%`, aspectRatio: `${width} / ${height}` }}
         onMouseDown={down} onTouchStart={down} onClick={(e) => set(e.clientX)}
@@ -467,11 +467,16 @@ export default function Consult() {
       </div>
 
       {/* ---------- TREATMENT EXPLORER ---------- */}
-      <section className="csec">
+      <section className="csec csec--xp">
         <div className="cwrap">
-          <p className="ckick">What we treat</p>
-          <h2 className="ch2">Tap a card to <em>open it</em></h2>
-          <p className="csub">Four things East Delhi walks in with most often. Each one has a different fix.</p>
+          {/* Plain block on mobile; at the desktop breakpoint it becomes the
+              left column beside the card deck. Grouping the three lines is the
+              only way to hold them together against one very tall neighbour. */}
+          <div className="cxp__copy">
+            <p className="ckick">What we treat</p>
+            <h2 className="ch2">Tap a card to <em>open it</em></h2>
+            <p className="csub">Four things East Delhi walks in with most often. Each one has a different fix.</p>
+          </div>
 
           <div
             className="cstage"
@@ -517,12 +522,14 @@ export default function Consult() {
             </div>
           </div>
 
+          {/* stays after the deck in the DOM — on mobile you should read the
+              cards before you are asked to book. Desktop only moves it. */}
           <a className="cxp-cta" href="#book">Book ₹{CONSULT.price} for this concern →</a>
         </div>
       </section>
 
       {/* ---------- CONCERN PICKER ---------- */}
-      <section className="csec">
+      <section className="csec csec--picker">
         <div className="cwrap">
           <p className="ckick">Start here</p>
           <h2 className="ch2">What is bothering you <em>right now?</em></h2>
@@ -556,7 +563,7 @@ export default function Consult() {
       </section>
 
       {/* ---------- WHY ---------- */}
-      <section className="csec csec--cream2">
+      <section className="csec csec--cream2 csec--why">
         <Reveal className="cwrap">
           <p className="ckick">Why ₹{CONSULT.price} is worth it</p>
           <h2 className="ch2">Most people waste <em>two years</em> guessing.</h2>
@@ -573,7 +580,7 @@ export default function Consult() {
       </section>
 
       {/* ---------- RESULTS ---------- */}
-      <section className="csec">
+      <section className="csec csec--results">
         <Reveal className="cwrap">
           <p className="ckick">Real patients</p>
           <h2 className="ch2">Drag to see the <em>difference</em></h2>
@@ -584,7 +591,7 @@ export default function Consult() {
       </section>
 
       {/* ---------- DOCTOR-LED ---------- */}
-      <section className="csec csec--cream2">
+      <section className="csec csec--cream2 csec--doc">
         <Reveal className="cwrap">
           <p className="ckick">Who you&rsquo;ll sit with</p>
           <h2 className="ch2">A doctor sees you. <em>Every time.</em></h2>
@@ -612,7 +619,7 @@ export default function Consult() {
       </section>
 
       {/* ---------- INSIDE THE CLINIC ---------- */}
-      <section className="csec">
+      <section className="csec csec--clinic">
         <Reveal className="cwrap">
           <p className="ckick">Inside the clinic</p>
           <h2 className="ch2">This is where you&rsquo;ll <em>actually sit</em></h2>
@@ -632,7 +639,7 @@ export default function Consult() {
       </section>
 
       {/* ---------- REVIEWS ---------- */}
-      <section className="csec">
+      <section className="csec csec--reviews">
         <Reveal className="cwrap">
           <p className="ckick">{REVIEW_RATING.score} ★ on Google</p>
           <h2 className="ch2">What East Delhi <em>says</em></h2>
@@ -754,7 +761,7 @@ export default function Consult() {
       </section>
 
       {/* ---------- FAQ ---------- */}
-      <section className="csec">
+      <section className="csec csec--faq">
         <Reveal className="cwrap">
           <p className="ckick">Before you book</p>
           <h2 className="ch2">Honest <em>answers</em></h2>
@@ -770,7 +777,7 @@ export default function Consult() {
       </section>
 
       {/* ---------- LOCATION ---------- */}
-      <section className="csec csec--cream2">
+      <section className="csec csec--cream2 csec--loc">
         <Reveal className="cwrap">
           <p className="ckick">Find us</p>
           <h2 className="ch2">Right here in <em>{CLINIC.address.area.split(',')[0]}</em></h2>
