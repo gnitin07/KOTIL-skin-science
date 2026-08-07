@@ -70,3 +70,43 @@ Vercel address restores the previous site with all its redirects intact.
 `vercel.json` and `.htaccess` describe the same 14 redirects for two different
 servers. Edit both, or one platform quietly diverges from the other. They are
 frozen legacy WordPress URLs, so this should be rare.
+
+**Do not put `"//"` comment keys in `vercel.json`.** JSON has no comments, and
+the `"//"` convention used to pass silently — but Vercel now schema-validates
+the file and rejects unknown properties outright (`headers[0] should NOT have
+additional property "//"`), failing the build before it starts. That is why the
+notes below live here instead. `.htaccess` is a real config format and keeps its
+comments inline.
+
+### What each `vercel.json` rule is for
+
+**`rewrites`, in order — the order is load-bearing.**
+
+1. `/consult` → `/consult.html`. The landing page is its own built page, not a
+   client-side route into `index.html`. A rewrite rather than a redirect, so the
+   address bar keeps the clean `/consult` the ads point at. It must stay above
+   the catch-all, which would otherwise hand it the homepage.
+2. `/consult/` → same, for the trailing-slash form.
+3. `/(.*)` → `/index.html`, the SPA catch-all.
+
+The big negative-lookahead redirect above them excludes `consult`, the asset
+directories and the root files; Vercel evaluates redirects before touching the
+filesystem, so anything that must be served as a real file has to be named there
+by hand. Apache does not need this — `.htaccess` just asks whether the file
+exists (`-f`), which is why that file has no equivalent regex.
+
+**`headers`.**
+
+- `/(assets|banners|clinic|compare|services|videos|results)/(.*)` gets one year,
+  `immutable`. Every file in those directories has a stable generated name from
+  the `scripts/*.mjs` pipeline, so a repeat visitor should never re-download one,
+  and `immutable` skips the revalidation round-trip entirely.
+  **Trade-off:** replacing an image in place will never reach anyone who already
+  cached it. To publish a changed picture, give it a new filename
+  (`g7.webp` → `g8.webp`). That is what the asset scripts are for.
+- Icons and `og.jpg` get a week instead — they change rarely, but they *are*
+  replaced in place, so a year would strand them.
+- The global rule sets `X-Content-Type-Options` and deliberately sets **no**
+  `Cache-Control`: a second rule matching the same path with the same key would
+  fight the `immutable` rule above. HTML keeps Vercel's default
+  (`max-age=0, must-revalidate`) so a deploy goes live immediately.
