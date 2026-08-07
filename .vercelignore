@@ -7,16 +7,23 @@
 # bites on Hobby: 100 MB static file uploads, 100 deploys/day.
 
 # 193 MB of high-res originals, versioned via Git LFS
-raw-assets
+/raw-assets
 
-# original clinic photos as supplied; public/clinic/ holds the shipped crops
-clinic
+# Original clinic photos as supplied. public/clinic/ holds the shipped crops
+# and MUST still be uploaded.
+#
+# The leading slash is load-bearing. .vercelignore uses gitignore syntax, so a
+# bare "clinic" matches a directory of that name at ANY depth — it silently
+# took public/clinic/ with it, the six gallery photos never reached the
+# deployment, and every /clinic/*.webp fell through to the SPA catch-all and
+# returned index.html. Anchored, it means the repo root only.
+/clinic
 
 # the sharp/ffmpeg asset pipeline — run locally, never during a Vercel build
-scripts
+/scripts
 
 # build output; Vercel produces its own
-dist
+/dist
 
 # Apache/LiteSpeed routing for Hostinger. Vercel does not run Apache, so it
 # would ignore the file as config — but Vite copies public/ into dist/, which
