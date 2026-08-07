@@ -1,0 +1,629 @@
+/* =============================================================================
+   /consult — the ₹99 consultation landing page.
+   =============================================================================
+   Self-contained on purpose. This page is the destination for paid ads, so it
+   loads NONE of the main site's CSS, GSAP or Lenis — see main.jsx, which code
+   splits the two pages apart. That means the reset and the tokens have to be
+   repeated here; keep the token values in sync with index.css if the brand
+   palette ever moves.
+
+   Layout is mobile-first and column-locked (max 520px, 600px on desktop):
+   ~95% of ad traffic lands on a phone, and a single narrow column is what makes
+   the page read as one continuous pitch instead of a shrunk-down website.
+   ========================================================================== */
+
+:root {
+  /* Brand palette — same values as index.css */
+  --navy: #0d1b2a;
+  --navy-2: #12203f;
+  --navy-3: #1b2a4a;
+  --gold: #e3a63b;
+  --gold-lite: #f4c563;
+  /* Darkened gold, for gold TEXT on the cream sections. The brand gold is a
+     2.1:1 contrast on cream — unreadable as body copy — so headings and labels
+     that sit on cream use this instead. */
+  --gold-deep: #8a610f;
+  --gold-soft: #f7e7c6;
+  --cream: #f6eee3;
+  --cream-2: #efe3d1;
+  --white: #fffdf8;
+  --muted: #566474;
+  --muted-2: #7f8d9c;
+  --wa: #25d366;
+  --ok: #1b7a3e;
+  --line: rgba(13, 27, 42, .11);
+  --line-2: rgba(13, 27, 42, .06);
+  --shadow-sm: 0 2px 10px rgba(13, 27, 42, .06);
+  --shadow: 0 10px 30px rgba(13, 27, 42, .1);
+  --shadow-lg: 0 24px 60px rgba(13, 27, 42, .16);
+  --r: 16px;
+  --r-lg: 24px;
+  --pad: 20px;
+  --font: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ease: cubic-bezier(0.6, 0.01, 0, 1);
+  --dock-h: 76px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--cream);
+  color: var(--navy);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: lining-nums tabular-nums;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  /* the fixed booking dock would otherwise cover the footer */
+  padding-bottom: calc(var(--dock-h) + env(safe-area-inset-bottom));
+}
+img { display: block; max-width: 100%; }
+picture { display: contents; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; border: none; background: none; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
+
+/* ---------- LAYOUT PRIMITIVES ---------- */
+.cwrap { width: 100%; max-width: 520px; margin: 0 auto; padding: 0 var(--pad); }
+.csec { padding: 44px 0; position: relative; }
+.csec--cream2 { background: var(--cream-2); }
+
+/* Kicker — the site's section label: gold, 600, wide tracking, uppercase.
+   The hairline after it is this page's own flourish. */
+.ckick {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold-deep);
+}
+.ckick::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold-soft), transparent); }
+
+/* Headings follow the site convention exactly: one family, weight 800, tight
+   tracking. The <em> accent is NOT italic here either — index.css sets
+   `font-style: normal` on its accents and colours them gold instead. */
+.ch2 {
+  font-size: 27px; line-height: 1.18; font-weight: 800; letter-spacing: -0.02em;
+  margin-bottom: 10px; text-wrap: balance;
+}
+.ch2 em { font-style: normal; color: var(--gold-deep); }
+.csub {
+  color: var(--muted); font-size: 14px; font-weight: 300; line-height: 1.62;
+  margin-bottom: 24px; max-width: 40ch; text-wrap: pretty;
+}
+
+/* ---------- UTILITY STRIP ---------- */
+.cutil {
+  background: #081019; color: var(--cream); font-size: 12.5px;
+  padding: 8px var(--pad);
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  border-bottom: 1px solid rgba(227, 166, 59, .16);
+}
+.cutil a { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; opacity: .82; }
+.cutil a:hover { opacity: 1; }
+.cutil .cwa-pill {
+  background: rgba(37, 211, 102, .14); color: #4ade80; opacity: 1;
+  font-weight: 500; padding: 4px 11px; border-radius: 100px; font-size: 12px;
+}
+.cutil .cwa-pill:hover { background: rgba(37, 211, 102, .24); color: #6ee79a; }
+
+/* ---------- HEADER ---------- */
+.chead {
+  position: sticky; top: 0; z-index: 60; background: var(--navy);
+  padding: 12px var(--pad);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  border-bottom: 1px solid rgba(227, 166, 59, .2);
+}
+.chead__logo img { height: 34px; width: auto; }
+
+/* Buttons — pill radius and gold-on-navy, matching .btn-primary / .nav__cta. */
+.cbtn-gold {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--gold); color: var(--navy); font-weight: 600; font-size: 14px;
+  padding: 11px 20px; border-radius: 100px; white-space: nowrap;
+  box-shadow: 0 6px 20px -6px rgba(227, 166, 59, .6);
+  transition: transform .2s var(--ease), box-shadow .2s, filter .2s;
+}
+.cbtn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 28px -6px rgba(227, 166, 59, .85); }
+.cbtn-gold:active { transform: scale(.98); }
+.chead .cbtn-gold { font-size: 13px; padding: 9px 17px; }
+
+/* ---------- HERO ---------- */
+.chero {
+  background:
+    radial-gradient(120% 80% at 80% 0%, rgba(227, 166, 59, .18), transparent 60%),
+    linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 62%, var(--navy) 100%);
+  color: var(--white); padding: 34px 0 40px; position: relative; overflow: hidden;
+}
+/* The same dotted grid the main hero uses, masked so it fades out downward. */
+.chero::before {
+  content: ""; position: absolute; inset: 0; opacity: .5; pointer-events: none;
+  background-image: radial-gradient(rgba(227, 166, 59, .15) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: linear-gradient(180deg, #000, transparent 70%);
+  mask-image: linear-gradient(180deg, #000, transparent 70%);
+}
+.chero .cwrap { position: relative; z-index: 2; }
+.clocus {
+  display: inline-flex; align-items: center; gap: 7px; margin-bottom: 20px;
+  font-size: 11.5px; font-weight: 500; letter-spacing: .06em;
+  background: rgba(246, 238, 227, .07); border: 1px solid rgba(227, 166, 59, .32);
+  color: var(--gold-lite); padding: 6px 13px; border-radius: 100px;
+}
+.cdot { width: 6px; height: 6px; border-radius: 50%; background: var(--wa); animation: cpulse 2.2s infinite; }
+@keyframes cpulse {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, .6); }
+  70% { box-shadow: 0 0 0 8px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+.chero h1 {
+  font-size: 34px; line-height: 1.12; font-weight: 800; letter-spacing: -0.03em;
+  margin-bottom: 14px; text-wrap: balance; color: var(--white);
+}
+.chero h1 em { font-style: normal; color: var(--gold-lite); }
+.clede {
+  color: rgba(246, 238, 227, .74); font-size: 15px; font-weight: 300; line-height: 1.62;
+  max-width: 36ch; margin-bottom: 26px; text-wrap: pretty;
+}
+
+/* ---------- THE ₹99 PASS (the page's signature object) ---------- */
+/* A ticket, not a card: the dashed tear line and the two punched notches are
+   what make it read as something you hold, which is the whole idea. */
+.cpass {
+  position: relative; margin-bottom: 20px; color: var(--navy);
+  background: linear-gradient(150deg, var(--white), var(--cream-2));
+  border: 1px solid rgba(227, 166, 59, .45); border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+}
+.cpass__top { padding: 22px 22px 26px; }
+.cpass__label {
+  font-size: 11px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase;
+  color: var(--gold-deep); margin-bottom: 14px;
+}
+.cprice-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+.cprice {
+  font-size: 54px; font-weight: 800; line-height: .86; letter-spacing: -0.05em;
+  background: linear-gradient(150deg, var(--gold-deep), var(--gold), var(--gold-deep));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.cwas { display: flex; flex-direction: column; gap: 2px; }
+.cwas s { color: var(--muted-2); font-size: 15px; font-weight: 400; }
+.cwas b { font-size: 11.5px; font-weight: 600; color: var(--ok); letter-spacing: .04em; }
+.cprice-for { font-size: 13.5px; font-weight: 500; margin-bottom: 16px; }
+.cincl { list-style: none; display: grid; gap: 9px; }
+.cincl li {
+  display: flex; gap: 9px; font-size: 13.5px; font-weight: 400;
+  color: var(--navy-3); line-height: 1.5;
+}
+.cincl svg { flex: none; margin-top: 3px; }
+/* The tear line and the two punched notches ride the seam between the two
+   halves, so they stay put no matter how tall either half grows. Anchoring
+   them to a fixed offset from the bottom put the perforation straight through
+   the CTA button the moment the copy changed length. */
+.cpass__bot { position: relative; padding: 16px 22px 20px; }
+.cpass__bot::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0;
+  border-top: 2px dashed rgba(13, 27, 42, .16);
+}
+.cpass__notch {
+  position: absolute; top: -13px; width: 26px; height: 26px; border-radius: 50%;
+  /* matches the hero gradient behind the ticket, so it reads as punched out */
+  background: var(--navy-2); border: 1px solid rgba(227, 166, 59, .3);
+}
+.cpass__notch--l { left: -14px; }
+.cpass__notch--r { right: -14px; }
+.cslots {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  font-size: 12px; font-weight: 500; color: var(--muted); margin-bottom: 12px;
+}
+.cslots b { color: #b03a2b; font-weight: 600; }
+.cmeter { height: 5px; border-radius: 100px; background: rgba(13, 27, 42, .09); overflow: hidden; margin-bottom: 14px; }
+.cmeter i { display: block; height: 100%; width: 0; border-radius: 100px; background: linear-gradient(90deg, var(--gold), #b03a2b); transition: width 1.4s var(--ease); }
+
+/* Full-width CTA. Squarer than the pill buttons on purpose — at this size a
+   100px radius starts to look like a lozenge rather than a button. */
+.cbtn-cta {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 9px;
+  background: var(--gold); color: var(--navy); font-weight: 700; font-size: 16.5px;
+  padding: 16px; border-radius: 14px; text-align: center;
+  box-shadow: 0 8px 22px -6px rgba(227, 166, 59, .7);
+  transition: transform .15s ease, filter .2s;
+}
+.cbtn-cta:hover { filter: brightness(1.05); }
+.cbtn-cta:active { transform: scale(.98); }
+.cbtn-cta[disabled] { opacity: .7; cursor: default; transform: none; }
+.cassure {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-size: 11.5px; color: var(--muted); margin-top: 11px; text-align: center;
+}
+
+/* trust strip — the site's four badges, compressed to one row */
+.ctrust {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+  background: rgba(246, 238, 227, .1); border-radius: 14px; overflow: hidden;
+}
+.ctrust div { background: rgba(246, 238, 227, .05); padding: 13px 6px; text-align: center; }
+.ctrust b { display: block; font-size: 16px; font-weight: 700; color: var(--gold-lite); letter-spacing: -0.03em; }
+.ctrust span { display: block; margin-top: 3px; font-size: 9.5px; line-height: 1.3; color: rgba(246, 238, 227, .6); }
+
+/* ---------- TREATMENT EXPLORER (3D card deck) ---------- */
+.cstage {
+  --thumbH: clamp(68px, 19vw, 104px);
+  --gutter: 14px;
+  position: relative; aspect-ratio: 3 / 4; border-radius: var(--r-lg); overflow: hidden;
+  background: var(--navy); box-shadow: var(--shadow-lg); perspective: 1400px; touch-action: pan-y;
+}
+.cpane {
+  position: absolute; inset: 0; opacity: 0; z-index: 1;
+  transform: rotateY(-24deg) translateZ(-140px) scale(1.1);
+  transform-origin: left center; backface-visibility: hidden;
+  transition: opacity .5s ease, transform .8s cubic-bezier(.19, .85, .22, 1);
+  will-change: transform, opacity;
+}
+.cpane--prev { transform: rotateY(24deg) translateZ(-140px) scale(1.1); transform-origin: right center; }
+.cpane.is-on { opacity: 1; transform: none; z-index: 2; }
+.cpane img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+.cpane::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(13, 27, 42, .1) 0%, rgba(13, 27, 42, .04) 30%, rgba(13, 27, 42, .74) 62%, rgba(13, 27, 42, .95) 100%);
+}
+.cpane__txt {
+  position: absolute; left: 20px; right: 20px; z-index: 3; color: var(--white);
+  bottom: calc(var(--thumbH) + var(--gutter) + 18px);
+}
+/* masked line reveal — each line slides up inside a clipped box */
+.cmask { display: block; overflow: hidden; }
+.cmask > span { display: block; transform: translateY(110%); transition: transform .7s cubic-bezier(.19, .85, .22, 1); }
+.cpane.is-on .cmask > span { transform: none; }
+.cpane.is-on .cmask--1 > span { transition-delay: .10s; }
+.cpane.is-on .cmask--2 > span { transition-delay: .18s; }
+.cpane.is-on .cmask--3 > span { transition-delay: .26s; }
+.cpane__k { font-size: 11px; font-weight: 600; letter-spacing: 2.6px; text-transform: uppercase; color: var(--gold-lite); }
+.cmask--1 { margin-bottom: 5px; }
+.cpane__txt h3 { font-size: 24px; font-weight: 800; letter-spacing: -0.028em; line-height: 1.16; }
+.cmask--2 { margin-bottom: 7px; }
+.cpane__txt p { font-size: 13px; font-weight: 300; line-height: 1.5; color: rgba(246, 238, 227, .82); text-wrap: pretty; }
+.cmask--3 { margin-bottom: 12px; }
+.cfacts {
+  display: flex; flex-wrap: wrap; gap: 6px; opacity: 0; transform: translateY(12px);
+  transition: opacity .5s ease, transform .6s var(--ease);
+}
+.cpane.is-on .cfacts { opacity: 1; transform: none; transition-delay: .36s; }
+.cfacts span {
+  font-size: 11px; font-weight: 500; padding: 5px 10px; border-radius: 100px; color: var(--white);
+  background: rgba(246, 238, 227, .14); border: 1px solid rgba(246, 238, 227, .22);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.cbar { position: absolute; top: 16px; left: 20px; right: 20px; z-index: 5; display: flex; gap: 5px; }
+.cbar i { flex: 1; height: 2.5px; border-radius: 100px; background: rgba(246, 238, 227, .25); transition: background .3s; }
+.cbar i.is-on { background: var(--gold); }
+
+.cthumbs {
+  position: absolute; left: var(--gutter); right: var(--gutter); bottom: var(--gutter); z-index: 6;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+}
+.cthumb {
+  position: relative; height: var(--thumbH); border-radius: 11px; overflow: hidden;
+  background: var(--navy); border: 1.5px solid rgba(246, 238, 227, .28);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .4);
+  transition: transform .35s cubic-bezier(.19, .85, .22, 1), border-color .3s, box-shadow .3s;
+}
+.cthumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .62; transition: opacity .3s; }
+.cthumb::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(13, 27, 42, .92)); }
+.cthumb span {
+  position: absolute; left: 0; right: 0; bottom: 5px; z-index: 2; padding: 0 4px;
+  font-size: 9.5px; font-weight: 600; color: var(--white); line-height: 1.15;
+}
+.cthumb[aria-selected="true"] {
+  border-color: var(--gold); transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, .5), 0 0 0 3px rgba(227, 166, 59, .25);
+}
+.cthumb[aria-selected="true"] img { opacity: 1; }
+.cxp-cta {
+  display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px;
+  background: var(--navy); color: var(--gold-lite); font-weight: 600; font-size: 15px;
+  padding: 15px; border-radius: 13px; transition: background .2s, color .2s;
+}
+.cxp-cta:hover { background: var(--navy-2); color: var(--gold); }
+
+/* ---------- CONCERN PICKER ---------- */
+.cpicker {
+  background: var(--white); border-radius: var(--r-lg); padding: 24px 20px;
+  border: 1px solid var(--line-2); box-shadow: var(--shadow-sm);
+}
+.cchips { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cchip {
+  border: 1.5px solid var(--line); background: var(--cream); border-radius: 14px;
+  padding: 14px 12px; text-align: left; transition: .18s ease;
+}
+.cchip__ic { display: block; margin-bottom: 7px; font-size: 19px; line-height: 1; }
+.cchip__t { display: block; font-size: 13.5px; font-weight: 600; line-height: 1.25; }
+.cchip__d { display: block; margin-top: 3px; font-size: 11px; color: var(--muted); line-height: 1.35; }
+.cchip[aria-pressed="true"] {
+  border-color: var(--gold); background: linear-gradient(150deg, var(--white), var(--gold-soft));
+  box-shadow: 0 6px 18px -6px rgba(227, 166, 59, .5);
+}
+.cchip:active { transform: scale(.98); }
+.canswer {
+  margin-top: 16px; padding: 20px; border-radius: 18px;
+  background: var(--navy); color: var(--white);
+  animation: crise .45s var(--ease);
+}
+@keyframes crise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.canswer__who { font-size: 11px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 10px; }
+.canswer h3 { font-size: 21px; font-weight: 800; line-height: 1.22; letter-spacing: -0.025em; margin-bottom: 9px; text-wrap: balance; }
+.canswer p { font-size: 13.5px; font-weight: 300; line-height: 1.62; color: rgba(246, 238, 227, .78); margin-bottom: 14px; text-wrap: pretty; }
+.cplan { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
+.cplan span {
+  font-size: 11.5px; font-weight: 500; padding: 5px 11px; border-radius: 100px;
+  background: rgba(227, 166, 59, .16); border: 1px solid rgba(227, 166, 59, .35); color: var(--gold-lite);
+}
+.canswer .cbtn-cta { font-size: 15px; padding: 14px; }
+
+/* ---------- WHY CARDS ---------- */
+.ccards { display: grid; gap: 12px; }
+.ccard {
+  display: flex; gap: 14px; align-items: flex-start; padding: 18px;
+  background: var(--white); border: 1px solid var(--line-2); border-radius: var(--r);
+  box-shadow: var(--shadow-sm);
+}
+.ccard__ic {
+  flex: none; width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center;
+  background: linear-gradient(150deg, var(--gold-soft), var(--white));
+  border: 1px solid rgba(227, 166, 59, .35); font-size: 18px;
+}
+.ccard h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; letter-spacing: -0.02em; }
+.ccard p { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.6; text-wrap: pretty; }
+
+/* ---------- BEFORE / AFTER ---------- */
+.cba {
+  position: relative; overflow: hidden; border-radius: var(--r-lg); cursor: ew-resize;
+  background: var(--navy-2); box-shadow: var(--shadow); user-select: none;
+  /* pan-y keeps the page scrolling vertically while we own the horizontal drag */
+  touch-action: pan-y;
+}
+.cba + .cba { margin-top: 14px; }
+.cba img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+/* clip-path on the top layer, so the bottom image keeps full width and cannot
+   squash as the handle moves */
+.cba__after { clip-path: inset(0 0 0 var(--pos, 50%)); }
+.cba__handle {
+  position: absolute; top: 0; bottom: 0; left: var(--pos, 50%); width: 3px;
+  background: var(--white); transform: translateX(-50%); pointer-events: none;
+  box-shadow: 0 0 14px rgba(0, 0, 0, .45);
+}
+.cba__knob {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 46px; height: 46px; border-radius: 50%; background: var(--white);
+  display: grid; place-items: center; font-size: 15px; color: var(--navy);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .3);
+}
+.cba__tag {
+  position: absolute; bottom: 14px; z-index: 2; pointer-events: none;
+  padding: 5px 11px; border-radius: 100px; font-size: 10.5px; font-weight: 600;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  background: rgba(9, 17, 30, .62); color: var(--cream);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.cba__tag--l { left: 14px; }
+.cba__tag--r { right: 14px; }
+.cba__cap { margin-top: 10px; font-size: 12.5px; font-weight: 500; color: var(--muted); text-align: center; }
+.cnote { margin-top: 12px; font-size: 11px; color: var(--muted-2); text-align: center; }
+
+/* ---------- DOCTOR-LED PROMISE ---------- */
+.cdoc {
+  border-radius: var(--r-lg); overflow: hidden; color: var(--white);
+  background: linear-gradient(160deg, var(--navy), var(--navy-2)); box-shadow: var(--shadow);
+}
+.cdoc__photo { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-bottom: 1px solid rgba(227, 166, 59, .25); }
+.cdoc__photo img { width: 100%; height: 100%; object-fit: cover; }
+.cdoc__photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(13, 27, 42, .75)); }
+.cdoc__body { padding: 22px; }
+.cdoc__role { font-size: 11px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 8px; }
+.cdoc__body h3 { font-size: 24px; font-weight: 800; letter-spacing: -0.028em; margin-bottom: 12px; line-height: 1.15; }
+.cdoc__body blockquote {
+  font-size: 14px; font-weight: 300; line-height: 1.68; color: rgba(246, 238, 227, .82);
+  padding-left: 14px; border-left: 2px solid var(--gold); text-wrap: pretty;
+}
+.cdoc__pts { list-style: none; display: grid; gap: 9px; margin-top: 16px; }
+.cdoc__pts li { display: flex; gap: 9px; font-size: 13.5px; font-weight: 300; color: rgba(246, 238, 227, .86); line-height: 1.5; }
+.cdoc__pts svg { flex: none; margin-top: 3px; }
+
+/* ---------- RAILS (clinic photos, reviews) ---------- */
+.crail {
+  display: flex; gap: 11px; overflow-x: auto; scroll-snap-type: x mandatory;
+  margin: 0 calc(var(--pad) * -1); padding: 4px var(--pad) 14px;
+  scrollbar-width: none; -ms-overflow-style: none;
+}
+.crail::-webkit-scrollbar { display: none; }
+.cshot {
+  flex: 0 0 62%; max-width: 230px; scroll-snap-align: center; position: relative;
+  aspect-ratio: 4 / 5; border-radius: var(--r); overflow: hidden;
+  border: 1px solid rgba(246, 238, 227, .14); box-shadow: var(--shadow);
+}
+.cshot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cshot::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 52%, rgba(13, 27, 42, .88)); }
+.cshot b {
+  position: absolute; left: 12px; right: 12px; bottom: 11px; z-index: 2;
+  color: var(--white); font-size: 11.5px; font-weight: 500; line-height: 1.3;
+}
+.crailhint { margin-top: -4px; font-size: 11px; color: var(--muted-2); text-align: center; }
+
+.crev {
+  flex: 0 0 82%; scroll-snap-align: center; padding: 18px;
+  background: var(--white); border: 1px solid var(--line-2); border-radius: var(--r);
+  box-shadow: var(--shadow-sm);
+}
+.cstars { color: #f5b301; font-size: 13px; letter-spacing: 2px; margin-bottom: 9px; }
+.crev p { font-size: 13.5px; font-weight: 300; color: var(--navy-3); line-height: 1.62; margin-bottom: 12px; text-wrap: pretty; }
+.crev__by { display: flex; align-items: center; gap: 9px; }
+.crev__av {
+  width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--gold), #d98b2b); color: var(--white);
+  font-size: 13px; font-weight: 700; flex: none;
+}
+.crev__by b { display: block; font-size: 12.5px; font-weight: 600; }
+.crev__by span { display: block; font-size: 11px; color: var(--muted-2); }
+.crate { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 18px; font-size: 13px; color: var(--muted); }
+.crate strong { font-size: 20px; font-weight: 800; color: var(--navy); letter-spacing: -0.02em; }
+
+/* ---------- BOOKING FORM ---------- */
+.cform-sec { background: linear-gradient(180deg, var(--navy), var(--navy-2)); color: var(--white); }
+.cform-sec .ckick { color: var(--gold); }
+.cform-sec .ckick::after { background: linear-gradient(90deg, rgba(227, 166, 59, .5), transparent); }
+.cform-sec .ch2 { color: var(--white); }
+.cform-sec .ch2 em { color: var(--gold-lite); }
+.cform-sec .csub { color: rgba(246, 238, 227, .7); }
+.cfbox {
+  padding: 22px 20px; border-radius: var(--r-lg);
+  background: rgba(246, 238, 227, .055); border: 1px solid rgba(246, 238, 227, .12);
+}
+.cfield { margin-bottom: 15px; }
+.cfield > label { display: block; margin-bottom: 7px; font-size: 12px; font-weight: 500; color: rgba(246, 238, 227, .7); }
+.cfield input, .cfield select {
+  width: 100%; padding: 14px; font-size: 15.5px; color: var(--white);
+  background: rgba(246, 238, 227, .08); border: 1.5px solid rgba(246, 238, 227, .16);
+  border-radius: 12px; transition: .18s;
+  -webkit-appearance: none; appearance: none;
+}
+.cfield select option { color: var(--navy); }
+.cfield select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23e3a63b' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 15px center;
+}
+.cfield input::placeholder { color: rgba(246, 238, 227, .35); }
+.cfield input:focus, .cfield select:focus { border-color: var(--gold); background: rgba(246, 238, 227, .12); outline: none; }
+.cfield.is-err input, .cfield.is-err select { border-color: #e9736b; }
+.cfield__msg { display: none; margin-top: 6px; font-size: 11.5px; color: #f2a09a; }
+.cfield.is-err .cfield__msg { display: block; }
+.cphone { position: relative; }
+.cphone__cc { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 15.5px; color: rgba(246, 238, 227, .55); pointer-events: none; }
+.cphone input { padding-left: 52px; letter-spacing: .04em; }
+.cslotgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cslotgrid label {
+  display: block; padding: 11px 8px; text-align: center; cursor: pointer;
+  font-size: 12.5px; font-weight: 500; color: rgba(246, 238, 227, .8);
+  background: rgba(246, 238, 227, .06); border: 1.5px solid rgba(246, 238, 227, .14);
+  border-radius: 11px; transition: .16s;
+}
+.cslotgrid input { position: absolute; opacity: 0; pointer-events: none; }
+.cslotgrid input:checked + label { background: rgba(227, 166, 59, .2); border-color: var(--gold); color: var(--gold-lite); }
+.cfnote { margin-top: 12px; font-size: 11px; line-height: 1.5; color: rgba(246, 238, 227, .45); text-align: center; }
+.cpaylogos { margin-top: 12px; font-size: 10.5px; letter-spacing: .06em; color: rgba(246, 238, 227, .4); text-align: center; }
+.cformerr { margin-top: 12px; font-size: 12.5px; color: #f2a09a; text-align: center; }
+
+.cdone { text-align: center; padding: 14px 0; animation: crise .5s var(--ease); }
+.cdone__tick {
+  width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 50%; display: grid; place-items: center;
+  background: rgba(37, 211, 102, .15); border: 2px solid var(--wa); font-size: 28px; color: var(--wa);
+}
+.cdone h3 { font-size: 23px; font-weight: 800; letter-spacing: -0.028em; margin-bottom: 8px; }
+.cdone p { font-size: 14px; color: rgba(246, 238, 227, .72); margin-bottom: 20px; }
+.cdone code {
+  display: inline-block; margin-bottom: 20px; padding: 7px 13px; border-radius: 100px;
+  background: rgba(246, 238, 227, .08); border: 1px solid rgba(227, 166, 59, .3);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; color: var(--gold-lite);
+}
+.cbtn-wa { background: var(--wa); color: #04310f; box-shadow: 0 8px 22px -6px rgba(37, 211, 102, .55); }
+
+/* ---------- FAQ ---------- */
+.cfaq { border-top: 1px solid var(--line); }
+.cfaq details { border-bottom: 1px solid var(--line); }
+.cfaq summary {
+  position: relative; list-style: none; cursor: pointer;
+  padding: 16px 34px 16px 0; font-size: 14.5px; font-weight: 500; line-height: 1.45;
+}
+.cfaq summary::-webkit-details-marker { display: none; }
+.cfaq summary::after {
+  content: "+"; position: absolute; right: 4px; top: 13px;
+  font-size: 21px; font-weight: 300; color: var(--gold-deep); transition: transform .2s;
+}
+.cfaq details[open] summary::after { transform: rotate(45deg); }
+.cfaq__a { padding: 0 4px 18px 0; font-size: 13.5px; font-weight: 300; color: var(--muted); line-height: 1.68; text-wrap: pretty; }
+
+/* ---------- LOCATION ---------- */
+.cloc { padding: 22px; background: var(--white); border: 1px solid var(--line-2); border-radius: var(--r-lg); box-shadow: var(--shadow-sm); }
+.cloc__row { display: flex; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line-2); }
+.cloc__row:last-of-type { border-bottom: none; }
+.cloc__ic { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--cream-2); font-size: 15px; }
+.cloc__row b { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 2px; }
+.cloc__row span { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.cmapbox { aspect-ratio: 16 / 11; margin-top: 16px; border-radius: 14px; overflow: hidden; background: #e8e2d5; border: 1px solid var(--line-2); }
+.cmapbox iframe { width: 100%; height: 100%; border: 0; display: block; filter: saturate(.9); }
+/* Facade shown until the visitor asks for the map — a flat, drawn stand-in, so
+   it costs no image request of its own. */
+.cmapbox__ask {
+  width: 100%; height: 100%; display: grid; place-content: center; gap: 2px; text-align: center;
+  background:
+    linear-gradient(90deg, rgba(13,27,42,.05) 1px, transparent 1px) 0 0 / 34px 34px,
+    linear-gradient(rgba(13,27,42,.05) 1px, transparent 1px) 0 0 / 34px 34px,
+    var(--cream-2);
+  transition: background-color .2s;
+}
+.cmapbox__ask:hover { background-color: var(--gold-soft); }
+.cmapbox__pin { font-size: 26px; line-height: 1; }
+.cmapbox__ask b { font-size: 14.5px; font-weight: 600; color: var(--gold-deep); }
+.cmapbox__ask span:last-child { font-size: 11.5px; color: var(--muted-2); }
+.cdirbtn {
+  display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px;
+  padding: 13px; border-radius: 100px; font-size: 14px; font-weight: 600;
+  border: 1.5px solid var(--gold); color: var(--gold-deep); transition: background .2s;
+}
+.cdirbtn:hover { background: var(--gold-soft); }
+
+/* ---------- FOOTER ---------- */
+.cfoot {
+  background: #0a1520; color: rgba(246, 238, 227, .55); text-align: center;
+  padding: 32px 0 26px; font-size: 11.5px; line-height: 1.7;
+  border-top: 1px solid rgba(227, 166, 59, .18);
+}
+.cfoot img { height: 40px; width: auto; margin: 0 auto 18px; }
+.cfoot__links { display: flex; gap: 16px; justify-content: center; margin-bottom: 14px; font-size: 12px; color: rgba(246, 238, 227, .72); }
+.cfoot__links a:hover { color: var(--gold-lite); }
+
+/* ---------- STICKY DOCK ---------- */
+.cdock {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 70;
+  display: flex; align-items: center; gap: 11px;
+  padding: 11px var(--pad) calc(11px + env(safe-area-inset-bottom));
+  background: rgba(13, 27, 42, .94); border-top: 1px solid rgba(227, 166, 59, .3);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+}
+.cdock__pr { flex: none; line-height: 1.15; }
+.cdock__pr b { display: block; font-size: 22px; font-weight: 800; letter-spacing: -0.04em; color: var(--gold-lite); }
+.cdock__pr s { font-size: 11px; color: rgba(246, 238, 227, .4); }
+.cdock .cbtn-gold { flex: 1; padding: 13px; font-size: 15px; font-weight: 700; }
+.cdock__wa {
+  flex: none; width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center;
+  background: var(--wa); box-shadow: 0 4px 14px rgba(37, 211, 102, .35);
+}
+
+/* ---------- REVEAL ON SCROLL ---------- */
+.crv { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s var(--ease); }
+.crv.is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .crv { opacity: 1; transform: none; }
+  .cpane, .cmask > span { transform: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ---------- DESKTOP ---------- */
+/* The column stays narrow: this page is a pitch, not a website. Only the type
+   and the padding grow. */
+@media (min-width: 760px) {
+  :root { --pad: 32px; }
+  body { font-size: 16px; }
+  .cwrap { max-width: 600px; }
+  .csec { padding: 60px 0; }
+  .chero h1 { font-size: 44px; letter-spacing: -0.035em; }
+  .ch2 { font-size: 33px; }
+  .cprice { font-size: 62px; }
+  .cpane__txt h3 { font-size: 28px; }
+  .cthumb span { font-size: 11px; }
+  /* keep the dock's contents on the same 600px column as everything above it,
+     instead of stretching one button across a 1440px screen */
+  .cdock { padding-left: max(var(--pad), calc((100% - 600px) / 2)); padding-right: max(var(--pad), calc((100% - 600px) / 2)); }
+}

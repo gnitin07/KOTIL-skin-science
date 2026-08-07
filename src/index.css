@@ -212,102 +212,10 @@ section { position: relative; }
 }
 
 /* ---------- HERO ---------- */
-.hero { height: 100vh; min-height: 640px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.hero__bg { position: absolute; inset: 0; background:
-    radial-gradient(120% 90% at 80% 20%, rgba(227,166,59,0.22), transparent 55%),
-    radial-gradient(90% 80% at 10% 90%, rgba(27,42,74,0.9), transparent 60%),
-    var(--navy);
-}
-.hero__grid { position: absolute; inset: 0; opacity: .12; background-image:
-    linear-gradient(rgba(227,166,59,.4) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(227,166,59,.4) 1px, transparent 1px);
-  background-size: 64px 64px; mask-image: radial-gradient(70% 70% at 50% 45%, #000, transparent); }
-/* Wordmark: ONE horizontal line, single font (Poppins), layered behind the
-   machines. Sits above .hero__bg (z-index 0) but below .hero__media (z-index 3). */
-.hero__wordmark {
-  /* centred with flex, NOT translate(-50%,-50%) — GSAP animates `transform`
-     on this element and would wipe out any CSS transform. */
-  position: absolute; inset: 0; z-index: 1;
-  display: flex; align-items: flex-start; justify-content: center;
-  padding-top: 15vh; /* sits in the upper band, above the person's head */
-  pointer-events: none;
-}
-.hero__wordmark .mask { display: block; overflow: hidden; padding-bottom: 0.08em; }
-.hero__wordmark .line {
-  display: block; white-space: nowrap;
-  font-family: var(--font);
-  font-weight: 800; font-size: 8.4vw; line-height: 1;
-  letter-spacing: -0.02em; color: var(--white);
-  opacity: .96;
-}
-
-.hero__inner {
-  position: relative; z-index: 2; width: 100%; height: 100%;
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: 1fr auto;
-  align-items: end; gap: clamp(16px, 3vw, 48px);
-  padding: 104px clamp(20px, 5vw, 64px) 58px;
-}
-/* copy sits bottom-left, clear of the wordmark */
-.hero__copy { grid-column: 1; grid-row: 2; min-width: 0; align-self: end; }
-.hero__copy p {
-  max-width: 430px; margin-top: 4px; font-weight: 300;
-  font-size: clamp(14px, 1.4vw, 17px); opacity: .82; line-height: 1.6;
-}
-.hero__btns { display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
-
-/* treatment cutout floating in FRONT of the wordmark, in the lower-right so it
-   clears the headline above it */
-.hero__media {
-  position: absolute; z-index: 3; right: 0; bottom: 0;
-  width: min(50%, 700px); height: 62%;
-  display: flex; align-items: flex-end; justify-content: flex-end;
-  pointer-events: none;
-  transform-origin: bottom right; /* parallax scale grows toward its corner */
-  will-change: transform;
-}
-.hero__team {
-  width: 100%; height: 100%; object-fit: contain; object-position: bottom right;
-  filter: drop-shadow(0 30px 50px rgba(0,0,0,.5));
-  will-change: transform;
-}
-
-/* MOBILE HERO — the wordmark is absolutely positioned on desktop (a layer behind
-   the cutout). On small screens that overlaps the photo, so we drop it into normal
-   flow and stack: wordmark → photo → copy. */
-@media (max-width: 900px) {
-  .hero {
-    height: auto; min-height: 100svh;
-    flex-direction: column; justify-content: flex-start; align-items: stretch;
-    padding: 92px 0 40px;
-  }
-  .hero__wordmark {
-    position: static; inset: auto; padding: 0 20px;
-    align-items: center; justify-content: center;
-  }
-  .hero__wordmark .line {
-    font-size: 12vw; white-space: normal; text-align: center; line-height: 1.02;
-  }
-  .hero__inner {
-    position: relative; height: auto; z-index: 2;
-    grid-template-columns: 1fr; grid-template-rows: auto auto;
-    padding: 18px 20px 0; gap: 18px; align-items: start;
-  }
-  .hero__media {
-    position: relative; right: auto; bottom: auto; margin: 0;
-    width: 100%; height: 38vh; grid-column: 1; grid-row: 1; align-self: center;
-  }
-  .hero__team { object-position: bottom center; }
-  .hero__copy { grid-column: 1; grid-row: 2; align-self: start; text-align: center; }
-  .hero__copy p { margin-left: auto; margin-right: auto; }
-  .hero__btns { justify-content: center; }
-  .scroll-hint { display: none; }
-}
-.hero__tag { display: inline-block; font-size: 12px; letter-spacing: 4px; color: var(--gold-lite); margin-bottom: 16px; font-weight: 500; text-transform: uppercase; }
-.scroll-hint { position: absolute; bottom: 22px; left: clamp(20px, 5vw, 64px); z-index: 5; font-size: 11px; letter-spacing: 3px; opacity: .55; text-transform: uppercase; }
-.scroll-hint::after { content: ""; display: block; width: 1px; height: 30px; margin: 8px 0 0; background: linear-gradient(var(--gold), transparent); animation: drop 1.8s infinite; }
-@media (max-width: 900px) { .scroll-hint { display: none; } }
-@keyframes drop { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+/* Removed. The scroll-animated hero (wordmark, treatment cutout, parallax,
+   scroll hint) was replaced by <HeroBanner>; none of its ~98 lines of CSS had
+   a matching element left in the markup. Its GSAP timelines went with it —
+   see animations.js. */
 
 /* ---------- TECHNOLOGY (compact slider: copy left, machine right) ---------- */
 .tech {
@@ -1179,59 +1087,7 @@ section { position: relative; }
 /* headings never strand a single word on line 2 */
 .stats__head h2, .treat__head h2, .tech__head h2, .vids__head h2, .gallery__head h2, .reviews__head h2, .faq__head h2, .results__head h2 { text-wrap: balance; }
 
-/* ---------- /CONSULT LANDING PAGE ---------- */
-/* The flow region is one flex column; on /consult, CSS `order` flips it so the
-   booking CTA leads and everything that sat above it follows in reverse.
-   DOM order never changes, so both pages share markup and #anchors work. */
+/* The hero-to-CTA region is one flex column. It used to carry the /consult
+   reorder as well; /consult is now a page of its own (src/Consult.jsx +
+   src/consult.css) and shares none of this stylesheet. */
 .flow { display: flex; flex-direction: column; }
-.page--consult .flow > .cta      { order: 1; }
-.page--consult .flow > .reviews  { order: 2; }
-.page--consult .flow > .vids     { order: 3; }
-.page--consult .flow > .gallery  { order: 4; }
-.page--consult .flow > .marquee  { order: 5; }
-.page--consult .flow > .tech     { order: 6; }
-.page--consult .flow > .treat    { order: 7; }
-.page--consult .flow > .results  { order: 8; }
-.page--consult .flow > .stats    { order: 9; }
-.page--consult .flow > .hbanner  { order: 10; }
-
-/* first section sits under the fixed header (topbar + solid nav ≈ 120px) */
-.page--consult .flow { background: var(--navy); padding-top: 122px; }
-/* mid-page banner: no header offset needed there */
-.page--consult .hbanner { margin-top: 0; }
-/* room for the fixed strip so the footer is never hidden behind it */
-.page--consult { padding-bottom: 66px; }
-/* floating widgets ride above the strip */
-.page--consult .fwa { bottom: 82px; }
-.page--consult .ai__pill { bottom: 82px; }
-.page--consult .ai__panel { bottom: 82px; }
-
-/* the strip itself — offer left, booking button right */
-.consultbar {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 65;
-  display: flex; align-items: center; justify-content: center; gap: clamp(14px,3vw,34px);
-  padding: 10px clamp(14px,4vw,40px);
-  background: rgba(8,16,25,.96); backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(227,166,59,.35);
-  box-shadow: 0 -12px 34px rgba(0,0,0,.4);
-}
-.consultbar__offer { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.consultbar__tag {
-  flex: 0 0 auto; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase;
-  color: var(--gold-lite); border: 1px solid rgba(227,166,59,.45); border-radius: 100px; padding: 4px 10px;
-}
-.consultbar__txt { font-size: clamp(13px,1.6vw,15.5px); color: var(--cream); opacity: .92; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.consultbar__txt b { color: var(--gold-lite); }
-.consultbar__btn {
-  flex: 0 0 auto; background: var(--gold); color: var(--navy); font-weight: 700;
-  font-size: clamp(13.5px,1.5vw,15px); padding: 11px 22px; border-radius: 100px;
-  box-shadow: 0 8px 24px -6px rgba(227,166,59,.7);
-  transition: transform .2s var(--ease), box-shadow .2s;
-}
-.consultbar__btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px -6px rgba(227,166,59,.9); }
-
-@media (max-width: 560px) {
-  .page--consult .flow { padding-top: 112px; }
-  .consultbar { gap: 10px; padding: 9px 12px; }
-  .consultbar__tag { display: none; }          /* offer text + button fit one row */
-}

@@ -21,7 +21,16 @@
       "permanent": true
     }
   ],
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "rewrites": [
+    {
+      "//": "/consult is its own built page (consult.html), not a client-side route into index.html. A rewrite and not a redirect, so the visitor's address bar keeps the clean /consult that the ads point at. This MUST stay above the catch-all below, which would otherwise hand it the homepage. public/.htaccess has the matching rule for Hostinger.",
+      "source": "/consult",
+      "destination": "/consult.html"
+    },
+    { "source": "/consult/", "destination": "/consult.html" },
+
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
 
   "headers": [
     {

@@ -3,6 +3,13 @@
 The site is fully static — no Node process, no database, no API. Hostinger
 serves the contents of `dist/` and `.htaccess` does the routing.
 
+**Two pages, two HTML files.** `dist/` contains `index.html` (the main site) and
+`consult.html` (the ₹99 landing page for paid ads). They are separate Vite
+entries and share no JavaScript or CSS beyond React, so an ad click does not
+download the homepage's GSAP bundle. `.htaccess` rewrites `/consult` to
+`/consult.html` — if that rule is lost, ad traffic lands on a 404. `vercel.json`
+carries the same rewrite for the rollback host; the two must agree.
+
 ## Why the build happens on your machine, not on Hostinger
 
 Hostinger's Git integration clones the repo into `public_html` verbatim. It does
@@ -39,7 +46,7 @@ risk.
 | Visit | Expect |
 |---|---|
 | `/` | homepage loads, video plays |
-| `/consult` typed directly | consult view, URL stays `/consult` |
+| `/consult` typed directly | ₹99 consultation landing page, URL stays `/consult` |
 | `/contact-us/` | 301 to `/#contact`, page scrolls to contact |
 | `/services/` | 301 to `/#treatments` |
 | `/some-old-wordpress-url` | 301 to `/` |

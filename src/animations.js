@@ -37,39 +37,17 @@ export function useSiteAnimations(root, lenisRef) {
     if (import.meta.env.DEV) { window.__lenis = lenis; window.__gsap = gsap; window.__ST = ScrollTrigger }
 
     // ---- navbar solidify ----
-    // /consult starts on a navy section, so the transparent-over-banner nav
-    // (dark logo/links) would be invisible there: pin it solid instead.
-    if (document.querySelector('.page--consult')) {
-      document.querySelector('.nav')?.classList.add('scrolled')
-    } else {
-      ScrollTrigger.create({
-        start: 'top -80', end: 99999,
-        onUpdate: (self) => {
-          document.querySelector('.nav')?.classList.toggle('scrolled', self.scroll() > 80)
-        },
-      })
-    }
+    ScrollTrigger.create({
+      start: 'top -80', end: 99999,
+      onUpdate: (self) => {
+        document.querySelector('.nav')?.classList.toggle('scrolled', self.scroll() > 80)
+      },
+    })
 
-    // ---- hero intro on load: everything animates in automatically, incl. the
-    // treatment cutout (she slides in on refresh — NO scroll needed). ----
-    // Each element is animated by EITHER the intro or the scroll parallax, never
-    // both. The intro animates the <img> .hero__team; the parallax animates the
-    // parent .hero__media — different nodes, so the scrub can't stomp the intro.
-    gsap.timeline({ defaults: { ease: 'power3.out' } })
-      .from('.hero__wordmark .line', { yPercent: 115, duration: 1.2, ease: 'power4.out' }, 0)
-      .from('.hero__team', { autoAlpha: 0, xPercent: 8, yPercent: 8, scale: 0.95, duration: 1.3 }, 0.2)
-      .from('.hero__tag', { y: 20, autoAlpha: 0, duration: 0.8 }, 0.4)
-      .from('.hero__copy p', { y: 26, autoAlpha: 0, duration: 0.9 }, 0.52)
-      .from('.hero__btns', { y: 26, autoAlpha: 0, duration: 0.9 }, 0.64)
-      .from('.scroll-hint', { autoAlpha: 0, duration: 0.6 }, 0.85)
-
-    // ---- hero: parallax out on scroll (wordmark drifts slower = depth) ----
-    // Parallax drives .hero__media (the container), leaving .hero__team (the img)
-    // free for the intro above.
-    gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 } })
-      .to('.hero__wordmark', { yPercent: -26, opacity: 0.25, ease: 'none' }, 0)
-      .to('.hero__media', { yPercent: 12, scale: 1.06, ease: 'none' }, 0)
-      .to('.hero__copy', { yPercent: -55, opacity: 0, ease: 'none' }, 0)
+    // (The old .hero — wordmark, cutout, parallax — was replaced by <HeroBanner>.
+    // Its intro and parallax timelines lived here until they were removed: every
+    // selector they held had stopped matching, so all they did was log a GSAP
+    // "target not found" warning on each of the ~16 tweens, on every page load.)
 
     // (The machine rig was replaced by the self-contained <TechSlider>
     // component, which owns its own timer and listeners.)
@@ -137,7 +115,12 @@ export function useSiteAnimations(root, lenisRef) {
     })
 
     // ---- reveals for reviews / faq / visit ----
+    // Skips silently when nothing matches. Some sections are conditional — the
+    // results grid only renders once RESULTS in data.js has entries — and
+    // handing GSAP a selector that matches nothing costs a console warning per
+    // tween while animating exactly zero elements.
     const revealBatch = (selector, trigger) => {
+      if (!document.querySelector(selector)) return
       gsap.from(selector, {
         y: 40, autoAlpha: 0, duration: 0.9, stagger: 0.1, ease: 'power3.out',
         scrollTrigger: { trigger: trigger || selector, start: 'top 82%' },

@@ -53,11 +53,16 @@ RewriteRule ^kotil-skin-experts/?$                                  /#tech      
 # -------------------------------------------------------------------------
 # 2. The one real second route.
 #
-# A rewrite, not a redirect: index.html is served AT /consult, so React
-# renders the consult view and the address bar keeps the URL. A 301 here
-# would bounce the visitor to the homepage instead.
+# /consult is its own built page — the site is a two-entry Vite build, so
+# dist/ contains consult.html alongside index.html. Serving that file rather
+# than index.html is what keeps the homepage's GSAP bundle and stylesheet out
+# of the landing page.
+#
+# A rewrite, not a redirect: consult.html is served AT /consult, so the
+# address bar keeps the clean URL the ads point at. A 301 would bounce the
+# visitor somewhere else and burn the click.
 # -------------------------------------------------------------------------
-RewriteRule ^consult/?$ /index.html [L]
+RewriteRule ^consult/?$ /consult.html [L]
 
 # -------------------------------------------------------------------------
 # 3. Real files win.

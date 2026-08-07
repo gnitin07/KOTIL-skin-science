@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- viewport-fit=cover: the fixed booking dock pads itself with
+         env(safe-area-inset-bottom), which reads 0 without this. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0d1b2a" />
+
+    <!-- This is an ad destination, not an indexable page: it repeats the
+         homepage's local-business content and would compete with it in search.
+         Static, so a crawler sees it without executing any JS. -->
+    <meta name="robots" content="noindex, follow" />
+
+    <title>₹99 Skin Consultation in Preet Vihar | Kotil Skin Science</title>
+    <meta name="description" content="Book a doctor-led skin consultation for ₹99 at Kotil Skin Science, Preet Vihar, East Delhi. Skin & scalp analysis plus a written treatment plan. Limited slots." />
+
+    <!-- Deliberately NOT here, unlike index.html: the LocalBusiness schema, the
+         canonical, the Search Console token and the OG card. All of those exist
+         to make the HOMEPAGE rank and share well; duplicating them on a noindex
+         ad page splits the signal and confuses the listing. -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Same six weights as the main site — consult.css uses every one of them. -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/consult-main.jsx"></script>
+  </body>
+</html>
